@@ -20,6 +20,11 @@ Route::get('/courses', function () {
     return view('courses.index', compact('courses'));
 })->middleware('auth');
 
+Route::get('/showcourse/{course_id}', function ($course_id) {
+    $course = DB::table('courses')->find($course_id);
+    return view('courses.show', compact('course'));
+})->middleware('auth');
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index');
