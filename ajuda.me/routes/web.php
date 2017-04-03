@@ -13,7 +13,12 @@
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->middleware('auth');
+
+Route::get('/courses', function () {
+    $courses = DB::table('courses')->orderBy('id', 'asc')->get();
+    return view('courses.index', compact('courses'));
+})->middleware('auth');
 
 Auth::routes();
 
