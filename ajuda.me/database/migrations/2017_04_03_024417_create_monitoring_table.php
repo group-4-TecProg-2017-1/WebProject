@@ -13,10 +13,10 @@ class CreateMonitoringTable extends Migration
      */
     public function up()
     {
-        Schema::create('monitoring', function (Blueprint $table) {
+        Schema::create('monitorings', function (Blueprint $table) {
             $table->increments('id')->unique();
             $table->string('place');
-            $table->string('content');
+            $table->string('subject');
             $table->time('starting_time');
             $table->time('duration');
             $table->integer('course_id')->unsigned();

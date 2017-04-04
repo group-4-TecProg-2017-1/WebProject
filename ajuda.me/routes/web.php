@@ -16,13 +16,18 @@ Route::get('/', function () {
 })->middleware('auth');
 
 Route::get('/courses', function () {
-    $courses = DB::table('courses')->orderBy('id', 'asc')->get();
+    $courses = App\Course::orderBy('id', 'asc')->get();
     return view('courses.index', compact('courses'));
 })->middleware('auth');
 
 Route::get('/showcourse/{course_id}', function ($course_id) {
-    $course = DB::table('courses')->find($course_id);
-    return view('courses.show', compact('course'));
+    $course = App\Course::where('id', (integer) $course_id)
+        ->first();
+    $monitor = App\Monitor::where('course_id', (integer) $course_id)
+        ->first();
+    $monitoring = App\Monitoring::where('course_id', (integer) $course_id)
+        ->first();
+    return view('courses.show', compact('course', 'monitor', 'monitoring'));
 })->middleware('auth');
 
 Auth::routes();
