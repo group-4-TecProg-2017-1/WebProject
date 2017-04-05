@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.master')
 
 @section('content')
     <div class="container">
@@ -42,10 +42,16 @@
                                 </tr>
                                 <tr>
                                     <td width="50%">
-                                        Monitor:
+                                        @if (count($monitors)==1)
+                                            Monitor:
+                                        @else
+                                            Monitors:
+                                        @endif
                                     </td>
                                     <td width="50%">
-                                        {{ $monitor->name }}
+                                            @foreach ($monitors as $monitor)
+                                                {{ $monitor->name }}<br>
+                                            @endforeach
                                     </td>
                                 </tr>
                             </table>
