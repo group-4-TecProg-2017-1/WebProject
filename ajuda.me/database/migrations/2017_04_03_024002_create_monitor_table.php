@@ -17,6 +17,7 @@ class CreateMonitorTable extends Migration
             $table->increments('id')->unique();
             $table->string('name');
             $table->integer('course_id')->unsigned();
+            $table->timestamps();
             $table->foreign('course_id')->references('id')->on('courses');
         });
     }
