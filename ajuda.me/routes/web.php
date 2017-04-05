@@ -15,20 +15,20 @@ Route::get('/', function () {
     return view('welcome');
 })->middleware('auth');
 
-Route::get('/courses', function () {
-    $courses = App\Course::orderBy('id', 'asc')->get();
-    return view('courses.index', compact('courses'));
-})->middleware('auth');
-
-Route::get('/showcourse/{course_id}', function ($course_id) {
-    $course = App\Course::where('id', (integer) $course_id)
-        ->first();
-    $monitor = App\Monitor::where('course_id', (integer) $course_id)
-        ->first();
-    $monitoring = App\Monitoring::where('course_id', (integer) $course_id)
-        ->first();
-    return view('courses.show', compact('course', 'monitor', 'monitoring'));
-})->middleware('auth');
+Route::get('/courses', 'CoursesController@index')
+    ->middleware('auth');
+Route::get('/courses/create', 'CoursesController@create')
+    ->middleware('auth');
+Route::post('/courses', 'CoursesController@store')
+    ->middleware('auth');
+Route::get('/courses/{course_id}', 'CoursesController@show')
+    ->middleware('auth');
+Route::get('/courses/{course_id}/edit', 'CoursesController@edit')
+    ->middleware('auth');
+//Route::patch('/courses/{course_id}', 'CoursesController@update')
+//    ->middleware('auth');
+//Route::delete('/courses/{course_id}', 'CoursesController@destroy')
+//    ->middleware('auth');
 
 Auth::routes();
 
