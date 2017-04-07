@@ -31,6 +31,13 @@ Route::get('/monitorings/create', 'MonitoringsController@create')
     ->middleware('auth');
 Route::get('/monitors', 'MonitorsController@create')
     ->middleware('auth');
+Route::get('/groups', 'StudyGroupController@index')
+    ->middleware('auth');
+Route::get('/groups/create', 'StudyGroupController@create')
+    ->middleware('auth'); 
+Route::post('/groups', 'StudyGroupController@store')
+    ->middleware('auth');   
+
 //Route::patch('/courses/{course_id}', 'CoursesController@update')
 //    ->middleware('auth');
 //Route::delete('/courses/{course_id}', 'CoursesController@destroy')
