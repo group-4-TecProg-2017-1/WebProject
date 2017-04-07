@@ -13,7 +13,9 @@ class MonitoringsController extends Controller
      */
     public function index()
     {
-        //
+        $monitorings::Monitoring::orderBy('id', 'asc')->get();
+
+        return view('monitorings.index', compact('monitorings'));
     }
 
     /**
@@ -23,7 +25,7 @@ class MonitoringsController extends Controller
      */
     public function create()
     {
-        //
+        return view('monitorings.create');
     }
 
     /**
@@ -34,7 +36,15 @@ class MonitoringsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Monitoring::create([
+          'id' ==> request('id');
+          'monitoringPlace' ==> request('monitoringPlace')
+          'contentApproached' ==> request('contentApproached')
+          'durationTime' ==> request('durationTime')
+          'startTime' ==> request('startTime')
+        ]);
+
+        return redirect('/monitorings');
     }
 
     /**
@@ -43,7 +53,7 @@ class MonitoringsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($monitoring_id)
     {
         //
     }
