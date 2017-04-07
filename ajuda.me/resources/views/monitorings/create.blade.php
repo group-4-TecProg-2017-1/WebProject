@@ -18,6 +18,19 @@
                             <label for="inputName">Monitoring Place:</label>
                             <input type="text" name="name" class="form-control" id="inputName" placeholder="Enter name">
                         </div>
+                        <div class="form-group">
+                            <label for="inputName">Content Approached:</label>
+                            <input type="text" name="name" class="form-control" id="inputName" placeholder="Enter name">
+                        </div>
+                        <div class="form-group">
+                            <label for="inputName">Start Time:</label>
+                            <input type="text" name="name" class="form-control" id="inputName" placeholder="Enter name">
+                        </div>
+                        <div class="form-group">
+                            <label for="inputName">Duration Time:</label>
+                            <input type="text" name="name" class="form-control" id="inputName" placeholder="Enter name">
+                        </div>
+
 
                         <button type="submit" class="btn btn-primary">Create</button>
                     </form>

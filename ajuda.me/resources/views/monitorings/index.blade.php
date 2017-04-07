@@ -25,7 +25,22 @@
                                 </td>
                                 <td width="50%">
                                     <a href="/monitorings/{{$monitoring->id}}">
-                                        {{ $monitoring->monitoringPlace }}
+                                        {{ $monitoring->Place }}
+                                    </a>
+                                </td>
+                                <td width="50%">
+                                    <a href="/monitorings/{{$monitoring->id}}">
+                                        {{ $monitoring->contentApproached }}
+                                    </a>
+                                </td>
+                                <td width="50%">
+                                    <a href="/monitorings/{{$monitoring->id}}">
+                                        {{ $monitoring->durationTime}}
+                                    </a>
+                                </td>
+                                <td width="50%">
+                                    <a href="/monitorings/{{$monitoring->id}}">
+                                        {{ $monitoring->startTime }}
                                     </a>
                                 </td>
                             </tr>
