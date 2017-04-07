@@ -13,7 +13,7 @@
                                         Content Approached:
                                     </td>
                                     <td width="50%">
-                                        {{$monitoring->subject}}
+                                        {{$monitoring->contentApproached}}
                                     </td>
                                 </tr>
                                 <tr>
@@ -29,7 +29,7 @@
                                         Starting time:
                                     </td>
                                     <td width="50%">
-                                        {{$monitoring->starting_time}}
+                                        {{$monitoring->startTime}}
                                     </td>
                                 </tr>
                                 <tr>
@@ -37,7 +37,7 @@
                                         Duration:
                                     </td>
                                     <td width="50%">
-                                        {{$monitoring->duration}}
+                                        {{$monitoring->durationTime}}
                                     </td>
                                 </tr>
                                 <tr>
