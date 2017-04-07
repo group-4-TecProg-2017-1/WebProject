@@ -35,10 +35,6 @@ Route::get('/monitors', 'MonitorsController@create')
 //    ->middleware('auth');
 //Route::delete('/courses/{course_id}', 'CoursesController@destroy')
 //    ->middleware('auth');
-Route::get('login/facebook', 'auth\FacebookController@redirectToProvider')->name('facebook.login');
-
-Route::get('auth/facebook/callback', 'auth\FacebookController@handleProviderCallback');
-
 
 Auth::routes();
 
