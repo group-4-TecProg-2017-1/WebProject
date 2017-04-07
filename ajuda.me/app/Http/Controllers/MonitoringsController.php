@@ -40,7 +40,7 @@ class MonitoringsController extends Controller
     {
         Monitoring::create([
           'id' => request('id'),
-          'monitoringPlace' => request('monitoringPlace'),
+          'place' => request('place'),
           'contentApproached' => request('contentApproached'),
           'durationTime' => request('durationTime'),
           'startTime' => request('startTime')
