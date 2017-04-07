@@ -13,7 +13,7 @@ class CreateStudygroupTable extends Migration
      */
     public function up()
     {
-        Schema::create('studygroups', function (Blueprint $table) {
+        Schema::create('study_groups', function (Blueprint $table) {
             $table->increments('id');
             $table->string('description');
             $table->string('place');
@@ -31,6 +31,6 @@ class CreateStudygroupTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('studygroups');
+        Schema::dropIfExists('study_groups');
     }
 }
