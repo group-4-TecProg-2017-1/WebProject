@@ -21,6 +21,7 @@
                     <ul class="nav navbar-nav">
                         @if (Auth::user())
                         <li><a href="/courses">Courses</a></li>
+                        <li><a href="/monitorings">Monitorings</a></li>
                         @else
                         <!-- Nothing to show -->
                         @endif

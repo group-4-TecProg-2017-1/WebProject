@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Monitoring;
+use App\Monitor;
 
 class MonitoringsController extends Controller
 {
@@ -13,7 +15,7 @@ class MonitoringsController extends Controller
      */
     public function index()
     {
-        $monitorings::Monitoring::orderBy('id', 'asc')->get();
+        $monitorings = Monitoring::orderBy('id', 'asc')->get();
 
         return view('monitorings.index', compact('monitorings'));
     }
@@ -37,11 +39,11 @@ class MonitoringsController extends Controller
     public function store(Request $request)
     {
         Monitoring::create([
-          'id' ==> request('id');
-          'monitoringPlace' ==> request('monitoringPlace')
-          'contentApproached' ==> request('contentApproached')
-          'durationTime' ==> request('durationTime')
-          'startTime' ==> request('startTime')
+          'id' => request('id'),
+          'place' => request('place'),
+          'contentApproached' => request('contentApproached'),
+          'durationTime' => request('durationTime'),
+          'startTime' => request('startTime')
         ]);
 
         return redirect('/monitorings');
