@@ -16,7 +16,7 @@ use App\Monitor;
 class MonitorTest extends TestCase
 {
     /**
-     * Tests the setMonitorId and getId functions.
+     * Tests the setMonitorId and getMonitorId functions.
      *
      * @return void
      */
