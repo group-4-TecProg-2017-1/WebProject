@@ -25,16 +25,21 @@ Route::get('/courses/{course_id}', 'CoursesController@show')
     ->middleware('auth');
 Route::get('/courses/{course_id}/edit', 'CoursesController@edit')
     ->middleware('auth');
-Route::get('/monitorings', 'MonitoringsController@index')
-    ->middleware('auth');
-Route::get('/monitorings/create', 'MonitoringsController@create')
-    ->middleware('auth');
-Route::get('/monitors', 'MonitorsController@create')
-    ->middleware('auth');
 //Route::patch('/courses/{course_id}', 'CoursesController@update')
 //    ->middleware('auth');
 //Route::delete('/courses/{course_id}', 'CoursesController@destroy')
 //    ->middleware('auth');
+
+Route::get('/monitorings', 'MonitoringsController@index')
+    ->middleware('auth');
+Route::get('/monitorings/create', 'MonitoringsController@create')
+    ->middleware('auth');
+Route::post('/monitorings', 'MonitoringsController@store')
+    ->middleware('auth');
+
+Route::get('/monitors', 'MonitorsController@create')
+    ->middleware('auth');
+
 
 Auth::routes();
 
