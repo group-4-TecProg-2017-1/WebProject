@@ -8,6 +8,11 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 use App\Course;
 
+/**
+ * Contains the suite of unit tests for Course model class methods.
+ *
+ * All tests' names MUST start with 'test' word.
+ */
 class CourseTest extends TestCase
 {
     /**
@@ -23,6 +28,11 @@ class CourseTest extends TestCase
         $this->assertEquals($fake_id, $fake_course->getCourseId());
     }
 
+    /**
+     * Tests the setCourseName and getCourseName functions.
+     *
+     * @return void
+     */
     public function testGetSetCourseName()
     {
         $fake_course = new Course;
