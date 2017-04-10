@@ -38,9 +38,16 @@ Route::post('/monitorings', 'MonitoringsController@store')
     ->middleware('auth');
 Route::get('/monitorings/{monitoring_id}', 'MonitoringsController@show')
     ->middleware('auth');
-
-Route::get('/monitors', 'MonitorsController@create')
+//Route::edit('/monitorings/{monitoring_id}', 'MonitoringsController@edit')
+//    ->middleware('auth');
+//Route::update('/monitorings/{monitoring_id}', 'MonitoringsController@update')
+//    ->middleware('auth');
+//Route::delete('/monitorings/{monitoring_id}', 'MonitoringsController@destroy')
+//    ->middleware('auth');
+    
+Route::get('/monitors', 'MonitorsController@index')
     ->middleware('auth');
+Route::get('/monitors/{MonitorId}', 'MonitorsController@show')
 
 
 Auth::routes();
