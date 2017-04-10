@@ -17,7 +17,9 @@
                         @foreach ($monitors as $monitor)
                             <tr>
                                 <td width="10%">
-                                    {{ $monitor->id }}
+                                    <a href="/monitors/{{$monitor->id}}">
+                                      {{ $monitor->id }}
+                                    </a>
                                 </td>
                             </tr>
                         @endforeach
