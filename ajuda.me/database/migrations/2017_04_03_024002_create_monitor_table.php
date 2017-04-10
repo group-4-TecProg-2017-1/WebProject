@@ -18,6 +18,9 @@ class CreateMonitorTable extends Migration
             $table->string('name');
             $table->integer('course_id')->unsigned();
             $table->timestamps();
+        });
+
+        Schema::table('monitors', function (Blueprint $table) {
             $table->foreign('course_id')->references('id')->on('courses');
         });
     }

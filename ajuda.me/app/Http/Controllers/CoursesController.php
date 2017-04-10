@@ -57,12 +57,12 @@ class CoursesController extends Controller
     {
         $course = Course::where('id', (integer) $course_id)
             ->first();
-        $monitoring = Monitoring::where('id', (integer) $course_id)
+        $monitoring = Monitoring::where('course_id', (integer) $course_id)
             ->first();
-        $monitor = Monitor::where('course_id', (integer) $course_id)
+        $monitors = Monitor::where('course_id', (integer) $course_id)
             ->get();
 
-        return view('courses.show', compact('course', 'monitoring', 'monitor'));
+        return view('courses.show', compact('course', 'monitoring', 'monitors'));
     }
 
     /**

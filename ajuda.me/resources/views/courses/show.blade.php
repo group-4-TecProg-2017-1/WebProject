@@ -12,15 +12,15 @@
                                     <td width="50%">
                                         Subject:
                                     </td>
-                                    <td width="50%">
-                                        {{$monitoring->contentApproached}}
+                                    <td width="40%">
+                                        {{$monitoring->subject}}
                                     </td>
                                 </tr>
                                 <tr>
                                     <td width="50%">
                                         Place:
                                     </td>
-                                    <td width="50%">
+                                    <td width="40%">
                                         {{$monitoring->place}}
                                     </td>
                                 </tr>
@@ -28,15 +28,15 @@
                                     <td width="50%">
                                         Starting time:
                                     </td>
-                                    <td width="50%">
-                                        {{$monitoring->startTime}}
+                                    <td width="40%">
+                                        {{$monitoring->starting_time}}
                                     </td>
                                 </tr>
                                 <tr>
                                     <td width="50%">
                                         Duration:
                                     </td>
-                                    <td width="50%">
+                                    <td width="40%">
                                         {{$monitoring->duration}}
                                     </td>
                                 </tr>
@@ -48,7 +48,7 @@
                                             Monitors:
                                         @endif
                                     </td>
-                                    <td width="50%">
+                                    <td width="40%">
                                             @foreach ($monitors as $monitor)
                                                 {{ $monitor->name }}<br>
                                             @endforeach
