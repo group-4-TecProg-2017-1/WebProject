@@ -44,10 +44,11 @@ Route::get('/monitorings/{monitoring_id}', 'MonitoringsController@show')
 //    ->middleware('auth');
 //Route::delete('/monitorings/{monitoring_id}', 'MonitoringsController@destroy')
 //    ->middleware('auth');
-    
+
 Route::get('/monitors', 'MonitorsController@index')
     ->middleware('auth');
 Route::get('/monitors/{MonitorId}', 'MonitorsController@show')
+    ->middleware('auth');
 
 
 Auth::routes();
