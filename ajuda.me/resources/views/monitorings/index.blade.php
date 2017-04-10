@@ -24,24 +24,18 @@
                                     {{ $monitoring->id }}
                                 </td>
                                 <td width="50%">
-                                    <a href="/monitorings/{{$monitoring->id}}">
-                                        {{ $monitoring->Place }}
-                                    </a>
+                                    {{ $monitoring->place }}
                                 </td>
                                 <td width="50%">
                                     <a href="/monitorings/{{$monitoring->id}}">
-                                        {{ $monitoring->contentApproached }}
+                                        {{ $monitoring->subject }}
                                     </a>
                                 </td>
                                 <td width="50%">
-                                    <a href="/monitorings/{{$monitoring->id}}">
-                                        {{ $monitoring->durationTime}}
-                                    </a>
+                                    {{ $monitoring->duration}}
                                 </td>
                                 <td width="50%">
-                                    <a href="/monitorings/{{$monitoring->id}}">
-                                        {{ $monitoring->startTime }}
-                                    </a>
+                                    {{ $monitoring->starting_time }}
                                 </td>
                             </tr>
                         @endforeach
