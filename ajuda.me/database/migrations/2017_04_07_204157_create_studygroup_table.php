@@ -14,10 +14,9 @@ class CreateStudygroupTable extends Migration
     public function up()
     {
         Schema::create('study_groups', function (Blueprint $table) {
-            $table->increments('id');
+            $table->increments('id')->unique();
             $table->string('description');
             $table->string('place');
-            $table->string('subjects');
             $table->dateTime('date_ocurred');
             $table->integer('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users');
