@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class MonitorsController extends Controller
 {
@@ -13,7 +14,9 @@ class MonitorsController extends Controller
      */
     public function index()
     {
-        //
+        $monitors = Monitor::orderBy('id', 'asc')->get();
+
+        return view('monitors.index', compact('monitors'));
     }
 
     /**
@@ -23,7 +26,7 @@ class MonitorsController extends Controller
      */
     public function create()
     {
-        //
+        return view('monitors.create');
     }
 
     /**
@@ -34,7 +37,12 @@ class MonitorsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Monitor::create([
+          'id' => Auth::id();
+
+        ]);
+
+        return redirect('/monitors');
     }
 
     /**
@@ -43,9 +51,12 @@ class MonitorsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($monitorId)
     {
-        //
+        $monitor = Monitor::where('id', (integer) $monitorId)
+            ->first();
+
+        return view('monitors.show', compact('monitor'));
     }
 
     /**
