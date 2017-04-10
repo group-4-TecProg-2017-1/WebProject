@@ -18,6 +18,7 @@ class CreateStudygroupTable extends Migration
             $table->string('description');
             $table->string('place');
             $table->string('subjects');
+            $table->dateTime('date_ocurred');
             $table->integer('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
