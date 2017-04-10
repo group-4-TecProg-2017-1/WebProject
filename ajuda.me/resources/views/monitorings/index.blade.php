@@ -5,7 +5,18 @@
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
             <div class="panel panel-default">
-                <div class="panel-heading">Monitorings</div>
+                <div class="panel-heading">
+                    <div class="col-md-3">
+                        <input class="form-control" type="text" placeholder="Monitoring Place" >
+                    </div>
+                    <div class="col-md-3">
+                        <input class="form-control" type="text" placeholder="Start Time" data-mask="__:__">
+                    </div>
+                    <div class="col-md-3">
+                        <input class="form-control" type="text" placeholder="Course" >
+                    </div>
+                    <button class="btn btn-primary">  search</button>
+                </div>
 
                 <div class="panel-body">
                     <table align="left">
