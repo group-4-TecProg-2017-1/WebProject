@@ -24,8 +24,13 @@
                     @else
                         <!-- Nothing to do -->
                     @endif
-                    </ul>
+
                 </div>
+
+                <div class="panel-body">
+                  <a href="/users/create">Create new user</a>
+                </div>
+                
             </div>
         </div>
     </div>
