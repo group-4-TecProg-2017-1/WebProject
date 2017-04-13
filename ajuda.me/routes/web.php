@@ -15,6 +15,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/users', 'UsersController@index')
+    ->middleware('auth');
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index');
