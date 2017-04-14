@@ -21,6 +21,9 @@ Route::get('/users', 'UsersController@index')
 Route::get('/users/create/', 'UsersController@create')
     ->middleware('auth');
 
+Route::post('/users', 'UsersController@store')
+    ->middleware('auth');
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index');
