@@ -50,23 +50,17 @@ Route::get('/monitors', 'MonitorsController@index')
 Route::get('/monitors/{MonitorId}', 'MonitorsController@show')
     ->middleware('auth');
 
-Route::get('/groups', 'StudyGroupController@index')
-    ->middleware('auth');
-Route::get('/groups/create', 'StudyGroupController@create')
-    ->middleware('auth'); 
-Route::post('/groups', 'StudyGroupController@store')
-    ->middleware('auth');   
 
 //Route::patch('/courses/{course_id}', 'CoursesController@update')
 //    ->middleware('auth');
 //Route::delete('/courses/{course_id}', 'CoursesController@destroy')
 //    ->middleware('auth');
 
- Route::get('/tags', 'TagsController@index')
+ Route::get('/tags', 'SubjectController@index')
     ->middleware('auth');
-Route::get('/tags/create', 'TagsController@create')
+Route::get('/tags/create', 'SubjectController@create')
     ->middleware('auth'); 
-Route::post('/tags', 'TagsController@store')
+Route::post('/tags', 'SubjectController@store')
     ->middleware('auth');     
 
 Auth::routes();
