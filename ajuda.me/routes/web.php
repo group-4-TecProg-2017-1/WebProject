@@ -62,6 +62,13 @@ Route::post('/groups', 'StudyGroupController@store')
 //Route::delete('/courses/{course_id}', 'CoursesController@destroy')
 //    ->middleware('auth');
 
+ Route::get('/tags', 'TagsController@index')
+    ->middleware('auth');
+Route::get('/tags/create', 'TagsController@create')
+    ->middleware('auth'); 
+Route::post('/tags', 'TagsController@store')
+    ->middleware('auth');     
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index');
