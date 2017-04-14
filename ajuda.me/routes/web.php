@@ -50,6 +50,17 @@ Route::get('/monitors', 'MonitorsController@index')
 Route::get('/monitors/{MonitorId}', 'MonitorsController@show')
     ->middleware('auth');
 
+Route::get('/groups', 'StudyGroupController@index')
+    ->middleware('auth');
+Route::get('/groups/create', 'StudyGroupController@create')
+    ->middleware('auth'); 
+Route::post('/groups', 'StudyGroupController@store')
+    ->middleware('auth');   
+
+//Route::patch('/courses/{course_id}', 'CoursesController@update')
+//    ->middleware('auth');
+//Route::delete('/courses/{course_id}', 'CoursesController@destroy')
+//    ->middleware('auth');
 
 Auth::routes();
 
