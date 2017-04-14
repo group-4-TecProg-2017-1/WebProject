@@ -22,5 +22,4 @@ class Subject extends Model
     {
         return $this->subject_name;
     }
-
 }

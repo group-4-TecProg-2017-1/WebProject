@@ -17,7 +17,7 @@ class SubjectController extends Controller {
     {
         $subjects = Subject::orderBy('id', 'asc')->get();
 
-        return view('subjects.index', compact('subjects'));
+        return view('tags.index', compact('subjects'));
     }
 
     /**
@@ -27,7 +27,7 @@ class SubjectController extends Controller {
      */
     public function create()
     {
-        return view('subjects.create');
+        return view('tags.create');
     }
 
     /**
