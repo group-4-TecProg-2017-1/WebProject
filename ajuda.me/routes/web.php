@@ -24,6 +24,12 @@ Route::get('/users/create/', 'UsersController@create')
 Route::post('/users', 'UsersController@store')
     ->middleware('auth');
 
+Route::get('/users/{id}/edit', 'UsersController@edit')
+    ->middleware('auth');
+
+Route::put('/users/{id}', 'UsersController@update')
+    ->middleware('auth');
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index');
