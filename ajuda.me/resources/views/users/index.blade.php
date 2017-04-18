@@ -26,10 +26,10 @@
                                     <td>{{$user->email}}</td>
                                     <td>{{$user->role}}</td>
                                     <td>
-                                        <a href="/users/{{$user->id}}/edit" class="btn btn-warning">Update</a>
+                                        <a href="/users/{{$user->id}}/edit" style="background-color:#00FF7F;"class="btn btn-warning">Update</a>
                                     </td>
                                     <td>
-                                        <a href="#" class="btn btn-danger">Delete</a>
+                                        <a href="/users/{{$user->id}}/delete" style="background-color:#FF6347;"class="btn btn-danger">Delete</a>
                                     </td>
                                 </tr>
                             @endforeach
