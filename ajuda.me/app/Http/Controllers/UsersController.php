@@ -86,7 +86,7 @@ class UsersController extends Controller
         $user->role = request('role');
         $user->save();
 
-        return redirect('/users')->with('status', 'Successful updated user!');
+        return redirect('/users')->with('status', 'Successfuly updated user!');
     }
 
     /**
@@ -100,6 +100,6 @@ class UsersController extends Controller
         $user = User::find($id);
         $user->delete();
 
-        return redirect('/users');
+        return redirect('/users')->with('status', 'Sucessfuly deleted user!');
     }
 }
