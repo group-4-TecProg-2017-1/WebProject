@@ -52,6 +52,9 @@
                                 <button type="submit" class="btn btn-primary">
                                     Register
                                 </button>
+                                <a href="/users" class="btn">
+                                    Cancel
+                                </a>
                             </div>
                         </div>
                     </form>
