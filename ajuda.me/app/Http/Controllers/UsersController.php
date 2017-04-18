@@ -44,7 +44,7 @@ class UsersController extends Controller
           'role' => request('role'),
         ]);
 
-        return redirect('/users');
+        return redirect('/users')->with('status', 'Successful created user!');
     }
 
     /**
@@ -66,7 +66,9 @@ class UsersController extends Controller
      */
     public function edit($id)
     {
-        //
+        $user = User::find($id);
+
+        return view ('users.edit', compact('user'));
     }
 
     /**
@@ -78,7 +80,13 @@ class UsersController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $user = User::find($id);
+        $user->name = request('name');
+        $user->email = request('email');
+        $user->role = request('role');
+        $user->save();
+
+        return redirect('/users')->with('status', 'Successful updated user!');
     }
 
     /**
