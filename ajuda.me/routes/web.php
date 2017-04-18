@@ -30,6 +30,9 @@ Route::get('/users/{id}/edit', 'UsersController@edit')
 Route::put('/users/{id}', 'UsersController@update')
     ->middleware('auth');
 
+Route::get('/users/{id}/delete', 'UsersController@destroy')
+    ->middleware('auth');
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index');
