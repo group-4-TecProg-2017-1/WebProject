@@ -33,6 +33,11 @@
                                 <input id="role" type="radio"  name="role" value="admin" required autofocus {{ $user->role === 'admin' ? 'checked' : '' }}> Admin <br>
                                 <input id="role" type="radio"  name="role" value="monitor" required autofocus {{ $user->role === 'monitor' ? 'checked' : '' }}> Monitor <br>
                                 <input id="role" type="radio"  name="role" value="student" required autofocus {{ $user->role === 'student' ? 'checked' : '' }}> Student <br>
+                            @if ($errors->has('role'))
+                                <span class="help-block">
+                                    <strong>{{ $errors->first('role') }}</strong>
+                                </span>
+                            @endif
                             </div>
                         </div>
 
