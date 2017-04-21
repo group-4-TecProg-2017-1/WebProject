@@ -26,7 +26,7 @@ class UsersController extends Controller
      */
     public function create()
     {
-        return view ('users.create');
+        return view('users.create');
     }
 
     /**
@@ -37,6 +37,8 @@ class UsersController extends Controller
      */
     public function store(Request $request)
     {
+        $this->validator($request);
+
         User::create([
           'name' => request('name'),
           'email' => request('email'),
@@ -68,7 +70,7 @@ class UsersController extends Controller
     {
         $user = User::find($id);
 
-        return view ('users.edit', compact('user'));
+        return view('users.edit', compact('user'));
     }
 
     /**
@@ -80,6 +82,8 @@ class UsersController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $this->validator($request);
+
         $user = User::find($id);
         $user->name = request('name');
         $user->email = request('email');
@@ -101,5 +105,20 @@ class UsersController extends Controller
         $user->delete();
 
         return redirect('/users')->with('status', 'Sucessfuly deleted user!');
+    }
+
+    /**
+     * Validates an incoming user store or update request.
+     *
+     * @param  Request  $request
+     * @return \Illuminate\Validation\ValidationException
+     */
+    protected function validator(Request $request)
+    {
+        return $this->validate($request, [
+                'name' => 'required|max:255',
+                'email' => 'required|email|max:255|unique:users',
+                'role' => 'in:admin, monitor,student',
+        ]);
     }
 }
