@@ -40,7 +40,7 @@ class UsersController extends Controller
         $this->validate($request, [
                 'name' => 'required|max:255',
                 'email' => 'required|email|max:255|unique:users',
-                'role' => 'in:admin, monitor,student',
+                'role' => 'in:admin,monitor,student',
         ]);
 
         User::create([
@@ -108,4 +108,5 @@ class UsersController extends Controller
 
         return redirect('/users')->with('status', 'Sucessfuly deleted user!');
     }
+
 }
