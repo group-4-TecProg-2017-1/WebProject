@@ -106,4 +106,19 @@ class CoursesController extends Controller
         return redirect('/courses');
         
     }
+/*
+    public function search($course_id)
+    {
+        $course = DB::table('courses')->where('id', course_id)->first();
+
+        echo $user->name;
+
+    }
+    */
+    public function editCourse($course)
+    {
+        
+        return view('/courses/edit' , compact('course') );
+        
+    }
 }
