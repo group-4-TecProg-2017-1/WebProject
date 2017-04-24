@@ -26,7 +26,8 @@ Route::get('/courses/{course_id}', 'CoursesController@show')
 Route::get('/courses/{course_id}/edit', 'CoursesController@edit')
     ->middleware('auth');
 Route::get('/course/{course_id}','CoursesController@delete');
-Route::get('/courses/edit/{course}','CoursesController@editCourse');
+Route::get('/courses/edit/{course_id}','CoursesController@editCourse');
+Route::post('/courses/edit', 'CoursesController@update');
 
 //Route::patch('/courses/{course_id}', 'CoursesController@update')
 //    ->middleware('auth');

@@ -82,11 +82,11 @@ class CoursesController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $course_id
      * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
         //
     }
+     */
 
     /**
      * Remove the specified course from database.
@@ -115,10 +115,20 @@ class CoursesController extends Controller
 
     }
     */
-    public function editCourse($course)
+    public function editCourse($course_id)
     {
+        $course= Course::where('id', (integer) $course_id)->first();
+        $oneCourse = array('course_id' => $course_id ,
+                           'name' => $course->name);
         
-        return view('/courses/edit' , compact('course') );
+        return view('/courses/edit' , $oneCourse );
         
+    }
+
+    public function update(Request $request)
+    {
+        Course::where('id', (integer) request('old_id'))->update(['name' => request('name') , 
+                                                                    'id' => request('id')]);
+        return redirect('/courses');
     }
 }

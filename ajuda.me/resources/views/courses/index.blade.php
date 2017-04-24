@@ -35,7 +35,7 @@
                                     </a>
                                 </td width="10%" >
                                 <td>
-                                    <a href="{{URL::to('/courses/edit/'.$course) }}" class="btn btn-info">
+                                    <a href="{{URL::to('/courses/edit/'.$course->id)}}" class="btn btn-info">
                                         Edit
                                     </a>
                                 </td>
