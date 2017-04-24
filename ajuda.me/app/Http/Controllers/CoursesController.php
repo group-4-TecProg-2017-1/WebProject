@@ -98,4 +98,12 @@ class CoursesController extends Controller
     {
         //
     }
+
+    public function delete($course_id)
+    {
+    
+        Course::find($course_id)->delete();
+        return redirect('/courses');
+        
+    }
 }

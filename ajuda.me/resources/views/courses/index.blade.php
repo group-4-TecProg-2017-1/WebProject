@@ -19,7 +19,7 @@
                         @foreach ($courses as $course)
                             <tr>
                                 <td width="10%" >
-                                    <a href="/courses" class="btn btn-danger" onclick="">
+                                    <a href="{{URL::to('/course/'.$course->id) }}" class="btn btn-danger">
                                         Delete
                                     </a>
                                 </td>
@@ -46,4 +46,5 @@
         </div>
     </div>
 </div>
+
 @endsection
