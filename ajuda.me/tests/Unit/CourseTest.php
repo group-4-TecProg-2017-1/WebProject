@@ -40,4 +40,21 @@ class CourseTest extends TestCase
         $fake_course->setCourseName($fake_name);
         $this->assertEquals($fake_name, $fake_course->getCourseName());
     }
+    
+    public function testCourseIsNotNull()
+    {
+        $fake_course = null;
+        $fake_course = new Course;
+        $this->assertNotNull($fake_course);   
+    }
+
+    public function testCourseHasAttributeCourse_id(){
+        $this->assertObjectHasAttribute('course_id' , new Course);
+    }
+   
+    public function testCourseHasAttributeName(){
+        $this->assertObjectHasAttribute('name' , new Course);
+    }
+
+    
 }

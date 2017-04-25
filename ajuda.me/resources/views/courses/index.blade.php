@@ -8,13 +8,16 @@
                 <div class="panel-heading">Courses
                 </div>
                 <div>
-                    <div class="col-md-3" >
-                        <input class="form-control" type="text" placeholder="ID" >
-                    </div>
-                    <div class="col-md-4">
-                        <input class="form-control" type="text" placeholder="Name" >
-                    </div>
-                    <button class="btn btn-primary">  search</button>
+                    <form action="/courses/filter" method="POST"> 
+                        {{ csrf_field() }}
+                        <div class="col-md-3" >
+                            <input class="form-control" type="text" placeholder="ID" name="id" >
+                        </div>
+                        <div class="col-md-4">
+                            <input class="form-control" type="text" placeholder="Name" name="name">
+                        </div>
+                        <button type="submit" class="btn btn-primary">  search</button>
+                    </form> 
                 </div>
 
                 <div class="panel-body">

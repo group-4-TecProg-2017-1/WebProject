@@ -131,4 +131,25 @@ class CoursesController extends Controller
                                                                     'id' => request('id')]);
         return redirect('/courses');
     }
+
+
+    public function filter(Request $request)
+    {
+        if (request('id') == null && request('name') == null ){
+
+            $courses = Course::orderBy('id', 'asc')->get();
+        }else{
+
+            if (request('id') != null ){
+                $courses = Course::where('id' , (integer) request('id'))->get();
+            }
+            if (request('name') != null){
+                $courses = Course::where('name' , (string) request('name'))->get();
+            } 
+        }        
+            
+
+        return view('/courses/index' , compact('courses'));
+
+    }
 }
