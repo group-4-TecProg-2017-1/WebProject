@@ -37,7 +37,11 @@ class UsersController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validator($request);
+        $this->validate($request, [
+                'name' => 'required|max:255',
+                'email' => 'required|email|max:255|unique:users',
+                'role' => 'in:admin,monitor,student',
+        ]);
 
         User::create([
           'name' => request('name'),
@@ -82,8 +86,6 @@ class UsersController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $this->validator($request);
-
         $user = User::find($id);
         $user->name = request('name');
         $user->email = request('email');
@@ -107,18 +109,4 @@ class UsersController extends Controller
         return redirect('/users')->with('status', 'Sucessfuly deleted user!');
     }
 
-    /**
-     * Validates an incoming user store or update request.
-     *
-     * @param  Request  $request
-     * @return \Illuminate\Validation\ValidationException
-     */
-    protected function validator(Request $request)
-    {
-        return $this->validate($request, [
-                'name' => 'required|max:255',
-                'email' => 'required|email|max:255|unique:users',
-                'role' => 'in:admin, monitor,student',
-        ]);
-    }
 }
