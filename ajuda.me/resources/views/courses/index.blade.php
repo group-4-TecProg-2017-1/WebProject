@@ -11,7 +11,7 @@
                     <form action="/courses/filter" method="POST"> 
                         {{ csrf_field() }}
                         <div class="col-md-3" >
-                            <input class="form-control" type="text" placeholder="ID" name="id" >
+                            <input class="form-control" type="text" maxlength="6" placeholder="ID" name="id" >
                         </div>
                         <div class="col-md-4">
                             <input class="form-control" type="text" placeholder="Name" name="name">
