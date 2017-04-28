@@ -39,10 +39,17 @@ class CoursesController extends Controller
      */
     public function store(Request $request)
     {
-        Course::create([
-            'id' => request('id'),
-            'name' => request('name')
-        ]);
+        $id = request('id');
+        $numericId = self::assertOnlyNumbers($id); 
+        $sixNumbersId = self::assertSizeIdIsSix($id); 
+
+        $name = request('name');
+        $validSizeName = self::assertNameSize($name);
+
+        if ($numericId && $sixNumbersId && $id != null && $validSizeName && $name != null){
+            Course::create(['id' => request('id'),'name' => request('name')]);
+        }
+
 
         return redirect('/courses');
     }
@@ -82,11 +89,11 @@ class CoursesController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $course_id
      * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
         //
     }
+     */
 
     /**
      * Remove the specified course from database.
@@ -98,4 +105,114 @@ class CoursesController extends Controller
     {
         //
     }
+
+    public function delete($course_id)
+    {
+    
+        Course::find($course_id)->delete();
+        return redirect('/courses');
+        
+    }
+/*
+    public function search($course_id)
+    {
+        $course = DB::table('courses')->where('id', course_id)->first();
+
+        echo $user->name;
+
+    }
+    */
+    public function editCourse($course_id)
+    {
+        $course= Course::where('id', (integer) $course_id)->first();
+        $oneCourse = array('course_id' => $course_id ,
+                           'name' => $course->name);
+        
+        return view('/courses/edit' , $oneCourse );
+        
+    }
+
+    public function update(Request $request)
+    {   
+        $id = request('id');
+        $numericId = self::assertOnlyNumbers($id); 
+        $sixNumbersId = self::assertSizeIdIsSix($id);
+
+        $name = request('name');
+        $validSizeName = self::assertNameSize($name);
+
+        if ($numericId && $sixNumbersId && $id != null && $validSizeName && $name != null){
+            
+            Course::where('id', (integer) request('old_id'))->update(['name' => request('name') , 
+                                                                        'id' => request('id')]);
+        }
+
+        return redirect('/courses');
+    }
+
+    public function assertNameSize($name){
+        define("MINSIZENAME" , "3"); // Lenght of course name must be bigger than 3;
+        $sizeName = strlen($name);
+        if ($sizeName >= MINSIZENAME){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public function assertOnlyNumbers($id){
+
+        if (is_numeric($id)){
+            return true;
+        }else{
+            return false;
+        }
+        
+    }
+
+
+    public function assertSizeIdIsSix($id){
+        define("IDSIZE" , "6"); // ID MUST contain only 6 numbers
+        $idSize = strlen ($id);
+
+        if ($idSize == IDSIZE ){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+
+    public function filter(Request $request)
+    {   
+        $id = request('id');
+        $numericId = self::assertOnlyNumbers($id); 
+        $sixNumbersId = self::assertSizeIdIsSix($id);  
+
+        if ($numericId && $sixNumbersId && $id != null){
+            echo "xuxuzinho";
+        }
+        
+
+        if (request('id') == null && request('name') == null ){
+
+            $courses = Course::orderBy('id', 'asc')->get();
+        }else{
+
+            if (request('id') != null ){
+                $courses = Course::where('id' , (integer) request('id'))->get();
+            }
+            if (request('name') != null){
+                $courses = Course::where('name' , (string) request('name'))->get();
+            } 
+        }        
+            
+
+        return view('/courses/index' , compact('courses'));
+
+    }
+
+    
+
 }
+
