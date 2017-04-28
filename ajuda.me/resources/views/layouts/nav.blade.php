@@ -19,7 +19,13 @@
         <div class="collapse navbar-collapse" id="app-navbar-collapse">
             <!-- Left Side Of Navbar -->
             <ul class="nav navbar-nav">
+                @if (Auth::user())
                 <li><a href="/users">Users</a></li>
+                <li><a href="/courses">Courses</a></li>
+                <li><a href="/monitorings">Monitorings</a></li>
+                @else
+                <!-- Nothing to show -->
+                @endif
             </ul>
 
             <!-- Right Side Of Navbar -->
@@ -53,3 +59,4 @@
         </div>
     </div>
 </nav>
+
