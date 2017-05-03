@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 use App\Course;
 use App\Monitoring;
@@ -46,13 +47,33 @@ class CoursesController extends Controller
         $name = request('name');
         $validSizeName = self::assertNameSize($name);
 
-        if ($numericId && $sixNumbersId && $id != null && $validSizeName && $name != null){
+        $courseExist = self::searchCourseOnDatabase($id);
+
+
+        if ($numericId && $sixNumbersId && $id != null && $validSizeName && $name != null && !$courseExist){
+
             Course::create(['id' => request('id'),'name' => request('name')]);
+            return redirect('/courses');
+        }else{
+            return view('/courses/create');
         }
 
-
-        return redirect('/courses');
     }
+
+
+    public function searchCourseOnDatabase($id){
+        $course = self::searchCourse($id);
+        $foundCourse = false;
+        if ($course != null){
+            $foundCourse = true;
+        }else{
+            $foundCourse = false;
+        }
+
+        return $foundCourse;
+    }
+
+
 
     /**
      * Display the specified course.
@@ -124,12 +145,20 @@ class CoursesController extends Controller
     */
     public function editCourse($course_id)
     {
-        $course= Course::where('id', (integer) $course_id)->first();
+        $course= self::searchCourse($course_id);
+
         $oneCourse = array('course_id' => $course_id ,
                            'name' => $course->name);
         
         return view('/courses/edit' , $oneCourse );
         
+    }
+
+    public function searchCourse($course_id)
+    {
+        $course = null;
+        $course= Course::where('id', (integer) $course_id)->first();
+        return $course;
     }
 
     public function update(Request $request)
