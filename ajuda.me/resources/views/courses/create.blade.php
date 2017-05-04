@@ -4,6 +4,18 @@
 <div class="container">
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
+            @if (count($errors) != 0)
+                <div class="alert alert-danger" role="alert">
+                    Os seguintes erros impedem o cadastro de curso:
+                    @foreach($errors as $error)
+                        <br>
+                        - {{$error}}
+                    @endforeach
+
+                </div>
+            @else
+
+            @endif
             <div class="panel panel-default">
                 <div class="panel-heading">Create course</div>
                 <div class="panel-body">

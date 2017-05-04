@@ -10,6 +10,8 @@ use App\Monitor;
 
 class CoursesController extends Controller
 {
+
+    
     /**
      * Display a listing of the courses.
      *
@@ -41,36 +43,45 @@ class CoursesController extends Controller
     public function store(Request $request)
     {
         $id = request('id');
-        $numericId = self::assertOnlyNumbers($id); 
-        $sixNumbersId = self::assertSizeIdIsSix($id); 
+        $errors = array();
+
+        $numericId = self::assertOnlyNumbers($id , $errors); 
+    
+        $sixNumbersId = self::assertSizeIdIsSix($id , $errors); 
 
         $name = request('name');
-        $validSizeName = self::assertNameSize($name);
+        $validSizeName = self::assertNameSize($name , $errors);
 
-        $courseExist = self::searchCourseOnDatabase($id);
-
-
-        if ($numericId && $sixNumbersId && $id != null && $validSizeName && $name != null && !$courseExist){
+        $courseCanBeCreated = self::courseCanBeCreated($id , $errors);
+        
+        $pageSelected = null;
+        if ($numericId && $sixNumbersId && $id != null && $validSizeName 
+            && $name != null && $courseCanBeCreated){
 
             Course::create(['id' => request('id'),'name' => request('name')]);
-            return redirect('/courses');
+            $pageSelected = redirect('/courses');
         }else{
-            return view('/courses/create');
+            $pageSelected = view('/courses/create' , compact('errors'));
         }
+        return $pageSelected;
 
     }
 
 
-    public function searchCourseOnDatabase($id){
+    public function courseCanBeCreated($id , & $errors){
+        define('COURSEFOUND' , "Existe outro curso cadastrado com esse ID");
+
         $course = self::searchCourse($id);
-        $foundCourse = false;
-        if ($course != null){
-            $foundCourse = true;
+        $courseCanBeCreated = false;
+        if ($course == null){
+
+            $courseCanBeCreated = true;
         }else{
-            $foundCourse = false;
+            array_push($errors , COURSEFOUND);
+            $courseCanBeCreated = false;
         }
 
-        return $foundCourse;
+        return $courseCanBeCreated;
     }
 
 
@@ -164,49 +175,76 @@ class CoursesController extends Controller
     public function update(Request $request)
     {   
         $id = request('id');
-        $numericId = self::assertOnlyNumbers($id); 
-        $sixNumbersId = self::assertSizeIdIsSix($id);
+        $errors = array();
+        $numericId = self::assertOnlyNumbers($id, $errors); 
+        $sixNumbersId = self::assertSizeIdIsSix($id, $errors);
 
         $name = request('name');
-        $validSizeName = self::assertNameSize($name);
+        $validSizeName = self::assertNameSize($name, $errors);
 
-        if ($numericId && $sixNumbersId && $id != null && $validSizeName && $name != null){
+        $courseCanBeCreated = self::courseCanBeCreated($id, $errors);
+
+        define('REDIRECTCOURSES' , '/courses');
+        define('VIEWCOURSESEDIT' , '/courses/edit');
+        $nextPage = null;
+
+        if ($numericId && $sixNumbersId && $id != null && $validSizeName
+             && $name != null && $courseCanBeCreated ){
             
-            Course::where('id', (integer) request('old_id'))->update(['name' => request('name') , 
-                                                                        'id' => request('id')]);
+            $old_id = request('old_id');
+            $valuesToUpdate = null;
+
+            if($old_id == $id){
+                $valuesToUpdate = ['name' => $name];
+            }else{
+                $valuesToUpdate = ['name' => $name, 'id' => $id];
+            }
+            Course::where('id', (integer) request('old_id'))->update($valuesToUpdate);
+            $nextPage = REDIRECTCOURSES;
+        }else{
+            // course will no be updated
+            $nextPage = VIEWCOURSESEDIT;
         }
 
-        return redirect('/courses');
+        return redirect($nextPage);
     }
 
-    public function assertNameSize($name){
+    public function assertNameSize($name , & $errors){
         define("MINSIZENAME" , "3"); // Lenght of course name must be bigger than 3;
+        define("ERRORNAMESIZE" , "Nome do curso deve possuir mais que 2 caracteres");
         $sizeName = strlen($name);
+
         if ($sizeName >= MINSIZENAME){
             return true;
         }else{
+            array_push($errors , ERRORNAMESIZE);
             return false;
         }
     }
 
-    public function assertOnlyNumbers($id){
+    public function assertOnlyNumbers($id , & $errors){
+        define('NOTONLYNUMBERS' , 'Deve conter apenas número no ID');
 
         if (is_numeric($id)){
             return true;
         }else{
+            array_push($errors , NOTONLYNUMBERS );
             return false;
         }
         
     }
 
 
-    public function assertSizeIdIsSix($id){
+    public function assertSizeIdIsSix($id , & $errors){
         define("IDSIZE" , "6"); // ID MUST contain only 6 numbers
+        define("ERRORIDSIZE" , "Tamanho do ID deve ser 6");
+
         $idSize = strlen ($id);
 
         if ($idSize == IDSIZE ){
             return true;
         }else{
+            array_push($errors, ERRORIDSIZE);
             return false;
         }
     }
