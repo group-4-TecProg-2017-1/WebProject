@@ -4,6 +4,18 @@
 <div class="container">
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
+            @if (count($errors) != 0)
+                <div class="alert alert-danger" role="alert">
+                    Os seguintes erros impedem a alteração do curso:
+                    @foreach($errors as $error)
+                        <br>
+                        - {{$error}}
+                    @endforeach
+
+                </div>
+            @else
+                <!-- nothing to so -->
+            @endif
             <div class="panel panel-default">
                 <div class="panel-heading">Edit course</div>
                 <div class="panel-body">
@@ -19,6 +31,7 @@
                             <input type="text" name="name" class="form-control" id="inputName" value="{{$name}}">
                         </div>
                         <input type="hidden" name="old_id" value="{{$course_id}}">
+                        <input type="hidden" name="old_name" value="{{$name}}">
 
                         <button type="submit" class="btn btn-primary">Update</button>
                     </form>

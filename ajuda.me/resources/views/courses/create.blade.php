@@ -1,4 +1,4 @@
-@extends('layouts.master')
+@extends('layouts.master') 
 
 @section('content')
 <div class="container">
@@ -14,7 +14,7 @@
 
                 </div>
             @else
-
+                <!-- nothing to so -->
             @endif
             <div class="panel panel-default">
                 <div class="panel-heading">Create course</div>
