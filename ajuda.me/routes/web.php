@@ -21,16 +21,16 @@ Route::get('/locations', 'LocationsController@index')
 Route::get('/locations/create', 'LocationsController@create')
     ->middleware('auth');
 
-Route::post('/locations', 'LocationsController@store');
+Route::post('/locations', 'LocationsController@store')
     ->middleware('auth');
 
-Route::get('/locations/{location_id}', 'LocationsController@show');
+Route::get('/locations/{location_id}', 'LocationsController@show')
     ->middleware('auth');
 
-Route::get('/locations/{location_id}/edit', 'LocationsController@edit');
+Route::get('/locations/{location_id}/edit', 'LocationsController@edit')
     ->middleware('auth');
 
-Route::get('/locations/{locations_id}/delete', 'LocationsController@destroy');
+Route::get('/locations/{locations_id}/delete', 'LocationsController@destroy')
     ->middleware('auth');
 
 Route::get('/courses', 'CoursesController@index')
