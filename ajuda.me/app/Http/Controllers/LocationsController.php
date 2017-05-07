@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 class LocationsController extends Controller
 {
     /**
-     *
+     * Display a listing of the locations.
      *
      * @return \Illuminate\Http\Response
      */
@@ -19,7 +19,7 @@ class LocationsController extends Controller
     }
 
     /**
-     *
+     * Show the form for creating a new location.
      *
      * @return \Illuminate\Http\Response
      */
@@ -29,47 +29,42 @@ class LocationsController extends Controller
     }
 
     /**
-     *
+     * Store a newly created location in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
+        $id = request('id');
+        $description = request('description');
+        $building = request('building');
+        $room = request('room');
+
         Location::create([
-            'id' => request('id'),
-            'description' => request('description'),
-            'building' => request('building'),
-            'room' => request('room')
+            'id' => $id,
+            'description' => $description,
+            'building' => $building,
+            'room' => $room
         ]);
 
         return redirect('/locations');
     }
 
     /**
-     *
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     *
+     * Show the form for editing the specified location.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
-        //
+        $location = Location::find($id);
+        return view('locations.edit', compact('location'));
     }
 
     /**
-     *
+     * Update the specified location in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
@@ -77,17 +72,25 @@ class LocationsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $location = Location::find($id);
+        $location->description = request('description');
+        $location->building = request('building');
+        $location->room = request('room');
+        $location->save();
+
+        return redirect('/locations')->with('status', 'Successfuly updated location!');
     }
 
     /**
-     *
+     * Remove the specified location from storage.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        //
+        $location = Location::find($id);
+        $location->delete();
+        return redirect('/locations')->with('status', 'Sucessfuly deleted locations!');
     }
 }
