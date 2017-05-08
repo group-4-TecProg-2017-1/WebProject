@@ -22,6 +22,7 @@
                 @if (Auth::user())
                 <li><a href="/users">Users</a></li>
                 <li><a href="/courses">Courses</a></li>
+                <li><a href="/locations">Locations</a></li>
                 @else
                 <!-- Nothing to show -->
                 @endif
@@ -58,4 +59,3 @@
         </div>
     </div>
 </nav>
-
