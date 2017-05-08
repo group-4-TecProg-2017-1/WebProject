@@ -12,17 +12,17 @@
 
                         <div class="form-group">
                             <label for="inputDescription">Description:</label>
-                            <input type="text" name="name" class="form-control" id="inputName" placeholder="Enter the location's description">
+                            <input type="text" name="description" class="form-control" id="inputName" placeholder="Enter the location's description">
                         </div>
 
                         <div class="form-group">
                             <label for="inputRoom">Room:</label>
-                            <input type="text" name="name" class="form-control" id="inputName" placeholder="Enter the location's room">
+                            <input type="text" name="room" class="form-control" id="inputName" placeholder="Enter the location's room">
                         </div>
 
                         <div class="form-group">
                             <label for="inputBuilding">Building:</label>
-                            <input type="text" name="name" class="form-control" id="inputName" placeholder="Enter the location's building">
+                            <input type="text" name="building" class="form-control" id="inputName" placeholder="Enter the location's building">
                         </div>
 
                         <button type="submit" class="btn btn-primary">Create</button>
