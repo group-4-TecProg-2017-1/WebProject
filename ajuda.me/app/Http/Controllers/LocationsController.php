@@ -37,19 +37,14 @@ class LocationsController extends Controller
      */
     public function store(Request $request)
     {
-        $id = request('id');
-        $description = request('description');
-        $building = request('building');
-        $room = request('room');
-
         Location::create([
-            'id' => $id,
-            'description' => $description,
-            'building' => $building,
-            'room' => $room
+            'id' => request('id'),
+            'description' => request('description'),
+            'building' => request('building'),
+            'room' => request('room'),
         ]);
 
-        return redirect('/locations');
+        return redirect('/locations')->with('status', 'Successfuly created location!');
     }
 
     /**
