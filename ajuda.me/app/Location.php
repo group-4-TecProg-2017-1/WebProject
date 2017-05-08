@@ -1,7 +1,7 @@
 <?php
 namespace App;
 
-class Location extends model
+class Location extends Model
 {
     private $location_id;
     private $description;
@@ -9,7 +9,7 @@ class Location extends model
     private $room;
 
 
-    public function setLocationID()
+    public function setLocationID($location_id)
     {
       $this->location_id = $location_id;
     }
@@ -17,7 +17,7 @@ class Location extends model
     {
       return $this->location_id;
     }
-    public function setLocationDescription()
+    public function setLocationDescription($description)
     {
       $this->description = $description;
     }
@@ -25,7 +25,7 @@ class Location extends model
     {
       return $this->description;
     }
-    public function setLocationBuilding()
+    public function setLocationBuilding($building)
     {
       $this->building = $building;
     }
@@ -33,9 +33,9 @@ class Location extends model
     {
       return $this->building;
     }
-    public function setLocationRoom()
+    public function setLocationRoom($room)
     {
-      $this->room = $romm;
+      $this->room = $room;
     }
     public function getLocationRoom()
     {
