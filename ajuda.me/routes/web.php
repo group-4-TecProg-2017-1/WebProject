@@ -30,6 +30,9 @@ Route::get('/locations/{location_id}', 'LocationsController@show')
 Route::get('/locations/{location_id}/edit', 'LocationsController@edit')
     ->middleware('auth');
 
+Route::put('/locations/{location_id}', 'LocationsController@update')
+    ->middleware('auth');
+
 Route::get('/locations/{locations_id}/delete', 'LocationsController@destroy')
     ->middleware('auth');
 
