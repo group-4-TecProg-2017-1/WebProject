@@ -271,9 +271,8 @@ class CoursesController extends Controller
         $errors = array();
         $valuesToUpdate = null;
 
-
         if($actualCourseId == $oldCourseId && $actualCourseName == $oldCourseName){
-
+            
             $nextPage = redirect ("/courses");
 
         }else if ($actualCourseId == $oldCourseId && strcmp($actualCourseName, $oldCourseName) != EQUAL_STRING ){
