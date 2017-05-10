@@ -9,26 +9,34 @@
                 <div class="panel-body">
                     <form class="" action="/locations" method="POST">
                         {{ csrf_field() }}
+                        {{ @checkedOne == null }}
 
-                        <div class="radio">
+                        <div class="radio" >
                           <label>
-                            <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" onclick="optionForms();" >
+                            <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked onclick="monitoringForms()">
                             Monitoring
                           </label>
                         </div>
                         <div class="radio">
                           <label>
-                            <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2" onclick="alert('bye');">
+                            <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2" onclick="studyGroupForms()">
                             Study Group
                           </label>
                         </div>
 
-
                        
 
-                        <div class="form-group">
+
+                        
+                          <div class="form-group" id="monitoringForm" style = "display:block">
+                              <label for="inputDescription">Description:</label>
+                              <input type="text" name="description" class="form-control" id="inputName" placeholder="Enter the location's description">
+                          </div>
+
+                       
+                        <div class="form-group" id="studyGroupForm" , style = "display:none" >
                             <label for="inputBuilding">Building:</label>
-                            <input type="text" name="building" class="form-control" id="inputName" placeholder="Enter the location's building">
+                            <input type="text" name="building" class="form-control" id="inputName" placeholder=" Enter the location's building">
                         </div>
 
 
@@ -39,26 +47,29 @@
         </div>
     </div>
 </div>
+ <script>
+  function monitoringForms() {
 
-<?php
-  function optionForms() {
-    echo 'TESTE';>
-     <div class="form-group">
-                            <label for="inputDescription">Description:</label>
-                            <input type="text" name="description" class="form-control" id="inputName" placeholder="Enter the location's description">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="inputRoom">Room:</label>
-                            <input type="text" name="room" class="form-control" id="inputName" placeholder="Enter the location's room">
-                        </div>
-  <?php
-  } >
-
-  if (isset($_GET['optionsRadios1'])) {
-    getMonitoringForms();
+    document.getElementById("monitoringForm").style.display = "block";
+    document.getElementById("studyGroupForm").style.display = "none"
 
   }
-?>
+
+  function studyGroupForms() {
+    
+    document.getElementById("monitoringForm").style.display = "none";
+    document.getElementById("studyGroupForm").style.display = "block";
+  }
+
+  
+</script>
+
+
+
+
+
 
 @endsection
+
+
+

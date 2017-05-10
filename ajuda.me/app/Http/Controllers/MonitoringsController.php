@@ -27,7 +27,12 @@ class MonitoringsController extends Controller
      */
     public function createOptionView() 
     {
-        return view('monitorings.create');
+        define("VIEW_TO_REDIRECT" , "/monitorings/create");
+        define("OPTION_ONE" , "option1");
+        
+        $value_one =  OPTION_ONE;
+        
+        return view(VIEW_TO_REDIRECT , compact('value_one'));
     }
 
     /**
