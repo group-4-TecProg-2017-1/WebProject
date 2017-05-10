@@ -92,6 +92,9 @@ Route::put('/users/{id}', 'UsersController@update')
 Route::get('/users/{id}/delete', 'UsersController@destroy')
     ->middleware('auth');
 
+Route::get('/monitorings', 'MonitoringsController@createOptionView')
+    ->middleware('auth');
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index');

@@ -25,7 +25,7 @@ class MonitoringsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function createOptionView() 
     {
         return view('monitorings.create');
     }

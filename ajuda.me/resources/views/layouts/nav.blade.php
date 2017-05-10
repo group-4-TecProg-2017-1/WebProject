@@ -23,6 +23,7 @@
                 <li><a href="/users">Users</a></li>
                 <li><a href="/courses">Courses</a></li>
                 <li><a href="/locations">Locations</a></li>
+                <li><a href="/monitorings">Monitoring</a></li>
                 @else
                 <!-- Nothing to show -->
                 @endif
