@@ -39,10 +39,10 @@ Route::get('/locations/{locations_id}/delete', 'LocationsController@destroy')
 Route::get('/courses', 'CoursesController@index')
     ->middleware('auth');
 
-Route::get('/courses/create', 'CoursesController@create')
+Route::get('/courses/create', 'CoursesController@createCourseView')
     ->middleware('auth');
 
-Route::post('/courses', 'CoursesController@store')
+Route::post('/courses', 'CoursesController@storeCourseOnDatabase')
     ->middleware('auth');
 
 Route::get('/courses/{course_id}', 'CoursesController@show')
