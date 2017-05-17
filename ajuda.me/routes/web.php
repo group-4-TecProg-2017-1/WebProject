@@ -12,7 +12,7 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('home');
 })->middleware('auth');
 
 Route::get('/locations', 'LocationsController@index')
