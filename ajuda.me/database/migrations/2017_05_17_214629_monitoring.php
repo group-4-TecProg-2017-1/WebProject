@@ -23,6 +23,7 @@ class Monitoring extends Migration
           $table->integer('id_courses')->unsigned();
           $table->foreign('id_location')->references('id')->on('locations');
           $table->foreign('id_courses')->references('id')->on('courses');
+          $table->timestamps();
         });
     }
 
