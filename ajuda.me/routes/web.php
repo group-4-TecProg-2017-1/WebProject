@@ -36,6 +36,18 @@ Route::put('/locations/{location_id}', 'LocationsController@update')
 Route::get('/locations/{locations_id}/delete', 'LocationsController@destroy')
     ->middleware('auth');
 
+Route::get('/monitorings', 'MonitoringsController@index')
+    ->middleware('auth');
+
+Route::get('/monitorings/create', 'MonitoringsController@create')
+    ->middleware('auth');
+
+Route::post('/monitorings', 'MonitoringsController@store')
+    ->middleware('auth');
+
+Route::get('/monitorings/{monitorings_id}/edit', 'MonitoringsController@edit')
+    ->middleware('auth');
+
 Route::get('/courses', 'CoursesController@index')
     ->middleware('auth');
 
