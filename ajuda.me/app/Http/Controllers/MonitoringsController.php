@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Monitoring;
-use App\Monitor;
 
 class MonitoringsController extends Controller
 {
@@ -40,24 +39,19 @@ class MonitoringsController extends Controller
     {
         Monitoring::create([
           'id' => request('id'),
-          'place' => request('place'),
           'contentApproached' => request('contentApproached'),
-          'durationTime' => request('durationTime'),
-          'startTime' => request('startTime')
+          'type' => request('type'),
+          'startTime' => request('startTime'),
+          'duration' => request('duration'),
+          'id_location' => request('id_location'),
+          'id_courses' => request('id_courses'),
         ]);
 
-        return redirect('/monitorings');
-    }
-
-    /**
-     * Display the specified monitoring.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($monitoring_id)
-    {
+        // UserOnMonitoring::create([
         //
+        // ]);
+
+        return redirect('/monitorings')->with('status', 'Successfuly created Monitoring!');
     }
 
     /**
@@ -68,7 +62,8 @@ class MonitoringsController extends Controller
      */
     public function edit($id)
     {
-        //
+        $monitoring = Monitoring::find($id);
+        return view('monitorings.edit', compact('monitoring'));
     }
 
     /**
