@@ -68,4 +68,11 @@ class Monitoring extends Model
     {
       return $this->id_courses;
     }
+
+    public function monitors()
+    {
+      return $this->belongsToMany('App\User', 'user_monitoring', 
+      'id_monitoring' ,'id_user')
+      -> withTimestamps();
+    }
 }

@@ -4,6 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Monitoring;
+use App\Location;
+use App\User;
+use App\Course;
+use Log;
 
 class MonitoringsController extends Controller
 {
@@ -26,7 +30,18 @@ class MonitoringsController extends Controller
      */
     public function create()
     {
-        return view('monitorings.create');
+        $locations = Location::orderBy('id', 'asc')->get();
+        $selectedLocation = User::first()->location_id;
+
+        $courses = Course::orderBy('id', 'asc')->get();
+        $selectedCourse = User::first()->course_id;
+
+        $monitors = User::where('role', 'monitor')->get();
+        $selectedMonitors = User::first()->user_id;
+
+
+        return view('monitorings.create', compact('locations', 'selectedLocation','courses', 
+            'selectedCourse','monitors','selectedMonitors'));
     }
 
     /**
@@ -37,20 +52,24 @@ class MonitoringsController extends Controller
      */
     public function store(Request $request)
     {
-        Monitoring::create([
-          'id' => request('id'),
-          'contentApproached' => request('contentApproached'),
-          'type' => request('type'),
-          'startTime' => request('startTime'),
-          'duration' => request('duration'),
-          'id_location' => request('id_location'),
-          'id_courses' => request('id_courses'),
-        ]);
 
-        // UserOnMonitoring::create([
-        //
-        // ]);
+        $monitoring = new Monitoring;
 
+        $monitoring->id = request('id');
+        $monitoring->contentApproached = request('contentApproached');
+        $monitoring->type = request('type');
+        $monitoring->startTime = request('startTime');
+        $monitoring->duration = request('duration');
+        $monitoring->id_location = request('location_id');
+        $monitoring->id_courses = request('course_id');
+
+        $monitoring->save();
+
+        foreach (request('monitors') as $monitor) {
+            $monitoring -> monitors() -> attach($monitor) ;
+        }
+
+        
         return redirect('/monitorings')->with('status', 'Successfuly created Monitoring!');
     }
 
