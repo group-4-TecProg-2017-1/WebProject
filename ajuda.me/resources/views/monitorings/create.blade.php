@@ -32,7 +32,7 @@
 
                         <div class="form-group">
                             <label for="inputDuration">Location</label>
-                            <select class="form-control m-bot15" name="location_id">
+                            <select class="form-control chosen-select" name="location_id">
 
                                 @if ($locations->count())
 
@@ -47,7 +47,7 @@
 
                         <div class="form-group">
                             <label for="inputDuration">Courses</label>
-                            <select class="form-control m-bot15" name="course_id">
+                            <select class="form-control chosen-select" name="course_id">
 
                                 @if ($courses->count())
 
@@ -61,7 +61,7 @@
                         </div>
 
                         <div class="form-group">
-                            <select multiple="multiple" name="monitors[]" id="monitor_id">
+                            <select multiple="multiple" name="monitors[]" id="monitor_id" class="form-control chosen-select">
                                 @foreach($monitors as $monitor)
                                         <option value="{{ $monitor->id }}" {{ $selectedMonitors == $monitor->id ? 'selected="selected"' : '' }}>{{ $monitor->name }}</option>
                                 @endforeach
@@ -75,4 +75,5 @@
         </div>
     </div>
 </div>
+
 @endsection
