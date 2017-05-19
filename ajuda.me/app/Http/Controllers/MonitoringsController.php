@@ -19,8 +19,11 @@ class MonitoringsController extends Controller
     public function index()
     {
         $monitorings = Monitoring::orderBy('id', 'asc')->get();
+        $locations = Location::orderBy('id', 'asc')->get();
+        $courses = Course::orderBy('id', 'asc')->get();
+        $selectedCourse = User::first()->course_id;
 
-        return view('monitorings.index', compact('monitorings'));
+        return view('monitorings.index', compact('monitorings', 'courses', 'locations', 'selectedCourse'));
     }
 
     /**
@@ -66,10 +69,10 @@ class MonitoringsController extends Controller
         $monitoring->save();
 
         foreach (request('monitors') as $monitor) {
-            $monitoring -> monitors() -> attach($monitor) ;
+            $monitoring -> monitors() -> attach($monitor);
         }
 
-        
+
         return redirect('/monitorings')->with('status', 'Successfuly created Monitoring!');
     }
 
