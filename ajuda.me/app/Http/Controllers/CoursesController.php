@@ -11,7 +11,39 @@ use App\Monitor;
 class CoursesController extends Controller
 {
 
+    const IDSIZE  = "6"; // ID MUST contain only 6 numbers
+    const ERRORIDSIZE = "Tamanho do ID deve ser 6"; // indicate the size of id when happens user's mistake
+    const VARIABLE_TO_SEND = "courses";
+    const NOTONLYNUMBERS = 'Deve conter apenas número no ID';
+    const MINSIZENAME = "3"; // Lenght of course name must be bigger than 3;
+    const ERRORNAMESIZE = "Nome do curso deve possuir mais que 2 caracteres";
+    const ERROR_COURSE_EXIST = "Outro curso já está cadastrado com esse ID";
+    const REDIRECTCOURSES = '/courses';
+    const VIEWCOURSESEDIT = '/courses/edit';
+    const ID_OF_COURSE = 'id';
+    const PREVIOUS_ID_OF_COURSE = 'old_id';
+    const COURSE_NAME = 'name';
+    const OLD_COURSE_NAME = 'old_name';
+    const ERROR_EQUAL_COURSE = "Nenhum campo foi atualizado, curso não pode ser alterado";
+    const EQUAL_STRING = 0;
+    const EMPTYNAME = "";
+    const NAME_OF_COURSE ='name';
+    const OLD_COURSE_ID ='old_id';
+    const COURSEFOUND = "Existe outro curso cadastrado com esse ID"; //course have been found on database
+    const URL_TO_COURSES = "/courses";
+    const FOUND_COURSE = "Curso foi encontrado.";
+    const COURSE_NOT_FOUND = "Curso não foi encontrado.";
     
+    // block of log's message
+    const LOG_DELETED_COURSE = "Course has been deleted on database";
+    const LOG_ID_VALID = "The size of id is valid"; // log to tell the that id is validated
+    const LOG_ID_INVALID = "The size of id is invalid"; // error log of id's size 
+    const LOG_INDEX_REACHED  = "Course view reached (index).";
+    const LOG_COURSE_VIEW = "View of course creation (create.blade)"; 
+    const LOG_EDIT_PAGE = "Edit page reached";
+    const LOG_VALID_COURSE = "All datas are validated, course can be created";
+
+
     /**
      * Display a listing of the courses.
      *
@@ -19,8 +51,8 @@ class CoursesController extends Controller
      */
     public function index()
     {
-        define("LOG_MESSAGE" , 'Course view reached (index).');
-        Log::info(LOG_MESSAGE);
+        
+        Log::info(self::LOG_INDEX_REACHED);
 
         $courses = Course::orderBy('id', 'asc')->get();
         
@@ -35,35 +67,54 @@ class CoursesController extends Controller
      */
     public function createCourseView()
     {
-        define("LOG_COURSE_VIEW" , "View of course creation (create.blade)");
-        Log::info(LOG_COURSE_VIEW);
+        
+        Log::info(self::LOG_COURSE_VIEW);
 
-        return view('courses.create');
+        $create_courses_view = 'courses.create';
+
+        return view($create_courses_view);
+    }
+
+    /**
+    *  Validate the data of the request (id and course's name)
+    *
+    * @param \Illuminate\Http\Request  $request
+    * @return boolean $valid_datas
+    *
+    */
+    public function validateRequestDatasToCreateCourse(Request $request)
+    {
+        // block validate id's conditions
+        $numericId = self::assertOnlyNumbers($id , $errors); 
+        $sixNumbersId = self::assertSizeIdIsSix($id , $errors);
+
+        // validate minimum size of name 
+        $validSizeName = self::assertNameSize($name , $errors);
+
+        // check if course exist on database
+        $courseCanBeCreated = self::courseCanBeCreated($id , $errors);
+
+
+
     }
 
 
     /**
-     * Store a newly created resource in database.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+    * Store a newly created resource in database.
+    *
+    * @param  \Illuminate\Http\Request  $request
+    * @return \Illuminate\Http\Response
+    */
     public function storeCourseOnDatabase(Request $request)
     {
-        define("LOG_VALID_COURSE", "All datas are validated, course can be created");
+        
         $id = request('id');
         $errors = array();
-
-        $numericId = self::assertOnlyNumbers($id , $errors); 
-    
-        $sixNumbersId = self::assertSizeIdIsSix($id , $errors); 
-
         $name = request('name');
-        $validSizeName = self::assertNameSize($name , $errors);
 
-        $courseCanBeCreated = self::courseCanBeCreated($id , $errors);
+        
 
-        Log::info(LOG_VALID_COURSE);
+        Log::info(self::LOG_VALID_COURSE);
         
         $pageSelected = null;
         if ($numericId && $sixNumbersId && $id != null && $validSizeName 
@@ -87,15 +138,16 @@ class CoursesController extends Controller
     *                                    false if course id exit and can't be created
     */
     public function courseCanBeCreated($id , & $errors){
-        define('COURSEFOUND' , "Existe outro curso cadastrado com esse ID");
 
         $course = self::searchCourse($id);
         $courseCanBeCreated = false;
+
         if ($course == null){
 
             $courseCanBeCreated = true;
         }else{
-            array_push($errors , COURSEFOUND);
+            
+            array_push($errors , self::COURSEFOUND);
             $courseCanBeCreated = false;
         }
 
@@ -133,21 +185,17 @@ class CoursesController extends Controller
     */
     public function delete($course_id)
     {
-        define('PAGE_TO_REDIRECT' , "/courses");
-        define('LOG_DELETED_COURSE' , "Course has been deleted on database");
-        define("FOUND_COURSE" , "Course has been found");
-        define("COURSE_NOT_FOUND" , "Course has not been found");
 
         $foundCourse = Course::find($course_id)->get();
 
         if ($foundCourse != null){
-            Log:info(FOUND_COURSE);
+            Log:info(self::FOUND_COURSE);
             Course::find($course_id)->delete();
         }else{
-            Log::warning(COURSE_NOT_FOUND);
+            Log::warning(self::COURSE_NOT_FOUND);
         }
 
-        return redirect(PAGE_TO_REDIRECT);
+        return redirect(self::URL_TO_COURSES);
         
     }
 
@@ -159,8 +207,8 @@ class CoursesController extends Controller
     */
     public function editCourse($course_id)
     {
-        define("LOG_EDIT_PAGE" , "Edit page reached");
-        Log::info(LOG_EDIT_PAGE);
+
+        Log::info(self::LOG_EDIT_PAGE);
 
         $course= self::searchCourse($course_id);
 
@@ -179,16 +227,14 @@ class CoursesController extends Controller
     }
 
     private function assertElementsOfRequestAreValid(Request $request , & $errors){
-        define('NAME_OF_COURSE' , 'name');
-        define('OLD_COURSE_ID' , 'old_id');
 
-        $courseName = request(NAME_OF_COURSE);;
+        $courseName = request(self::NAME_OF_COURSE);;
         $isValidName = self::validateName($courseName , $errors);
 
-        $actualCourseId = request(ID_OF_COURSE);
+        $actualCourseId = request(self::ID_OF_COURSE);
         $isValidActualId = self::validateId($actualCourseId , $errors);
 
-        $oldCourseId = request(OLD_COURSE_ID);
+        $oldCourseId = request(self::OLD_COURSE_ID);
         $isValidOldCourseId = self::validateId($oldCourseId , $errors);
 
         $validElementsOfRequest = false;
@@ -210,13 +256,11 @@ class CoursesController extends Controller
     *   @return bool $validName ,return true if name is validated else return false
     */
     private function validateName($name , $errors){
-        define('NULLNAME' , null);
-        define('EMPTYNAME' , "");
 
         $validSizeName = self::assertNameSize($name , $errors);
         
         $validName = false;
-        if($validSizeName && $name != NULLNAME && $name != EMPTYNAME ){
+        if($validSizeName && $name != null && $name != self::EMPTYNAME ){
 
             $validName = true;
         }else{
@@ -240,7 +284,7 @@ class CoursesController extends Controller
         $sixLengthId = self::assertSizeIdIsSix($id , $errors);
 
         $validId = false;
-        if($onlyNumbersOnId && $sixLengthId && $id != null && $id != EMPTYNAME){
+        if($onlyNumbersOnId && $sixLengthId && $id != null && $id != self::EMPTYNAME){
             $validId = true;
         }else{
             $validId = false;
@@ -257,19 +301,12 @@ class CoursesController extends Controller
     */    
     public function validateIfCourseCanBeUpdated(Request $request)
     {   
-        define('REDIRECTCOURSES' , '/courses');
-        define('VIEWCOURSESEDIT' , '/courses/edit');
-        define('ID_OF_COURSE' , 'id');
-        define('PREVIOUS_ID_OF_COURSE' , 'old_id');
-        define('COURSE_NAME' , 'name');
-        define('OLD_COURSE_NAME' , 'old_name');
-        define('ERROR_EQUAL_COURSE' , "Nenhum campo foi atualizado, curso não pode ser alterado");
-        define('EQUAL_STRING' , 0);
 
-        $actualCourseId = request(ID_OF_COURSE);
-        $oldCourseId = request(PREVIOUS_ID_OF_COURSE);
-        $actualCourseName = request(COURSE_NAME);
-        $oldCourseName = request(OLD_COURSE_NAME);
+
+        $actualCourseId = request(self::ID_OF_COURSE);
+        $oldCourseId = request(self::PREVIOUS_ID_OF_COURSE);
+        $actualCourseName = request(self::COURSE_NAME);
+        $oldCourseName = request(self::OLD_COURSE_NAME);
 
         $nextPage = null;
         $errors = array();
@@ -279,14 +316,14 @@ class CoursesController extends Controller
             
             $nextPage = redirect ("/courses");
 
-        }else if ($actualCourseId == $oldCourseId && strcmp($actualCourseName, $oldCourseName) != EQUAL_STRING ){
+        }else if ($actualCourseId == $oldCourseId && strcmp($actualCourseName, $oldCourseName) != self::EQUAL_STRING ){
 
             $validName = self::assertNameSize($actualCourseName , $errors);
 
             if($validName){
 
-                $valuesToUpdate = [COURSE_NAME => $actualCourseName];
-                Course::where( ID_OF_COURSE, $oldCourseId)->update($valuesToUpdate);
+                $valuesToUpdate = [self::COURSE_NAME => $actualCourseName];
+                Course::where( self::ID_OF_COURSE, $oldCourseId)->update($valuesToUpdate);
                 $nextPage = redirect ("/courses");
 
             }else{
@@ -295,15 +332,15 @@ class CoursesController extends Controller
                 $nextPage = view("/courses/edit" , compact('errors' , 'course_id' , 'name') );
             }     
 
-        }else if($actualCourseId != $oldCourseId && strcmp($actualCourseName, $oldCourseName) == EQUAL_STRING){
+        }else if($actualCourseId != $oldCourseId && strcmp($actualCourseName, $oldCourseName) == self::EQUAL_STRING){
             
             $validNumbersId = self::assertOnlyNumbers($actualCourseId , $errors);
             $validSizeId = self::assertSizeIdIsSix($actualCourseId , $errors);
             $idNotRegistered = self::assertCourseDontExist($actualCourseName , $actualCourseId,  $errors);
 
             if($validNumbersId && $validSizeId && $idNotRegistered ){
-                $valuesToUpdate = [ID_OF_COURSE => $actualCourseId];
-                Course::where( ID_OF_COURSE, $oldCourseId)->update($valuesToUpdate);
+                $valuesToUpdate = [self::ID_OF_COURSE => $actualCourseId];
+                Course::where( self::ID_OF_COURSE, $oldCourseId)->update($valuesToUpdate);
                 $nextPage = redirect ("/courses");
             }else{
                 $course_id = $oldCourseId;
@@ -319,9 +356,9 @@ class CoursesController extends Controller
             $idNotRegistered = self::assertCourseDontExist($actualCourseName , $actualCourseId,  $errors);
 
             if ($validName && $validNumbersId && $validSizeId && $idNotRegistered){
-                $valuesToUpdate = [ID_OF_COURSE => $actualCourseId , 
-                                   COURSE_NAME => $actualCourseName ];
-                Course::where( ID_OF_COURSE, $oldCourseId)->update($valuesToUpdate);
+                $valuesToUpdate = [self::ID_OF_COURSE => $actualCourseId , 
+                                   self::COURSE_NAME => $actualCourseName ];
+                Course::where( self::ID_OF_COURSE, $oldCourseId)->update($valuesToUpdate);
                 $nextPage = redirect ("/courses");
                 
             }else{
@@ -340,14 +377,13 @@ class CoursesController extends Controller
 
     private function assertCourseDontExist($actualCourseName , $actualCourseId , & $errors){
 
-        define("ERROR_COURSE_EXIST" , "Outro curso já está cadastrado com esse ID");
 
-        $courseExist = Course::where( ID_OF_COURSE, $actualCourseId)->first();
+        $courseExist = Course::where( self::ID_OF_COURSE, $actualCourseId)->first();
         $canCreate = false;
         if ($courseExist == null){
             $canCreate = true;
         }else{
-            array_push($errors, ERROR_COURSE_EXIST);
+            array_push($errors, self::ERROR_COURSE_EXIST);
             $canCreate = false;
         }
         return $canCreate;
@@ -361,16 +397,15 @@ class CoursesController extends Controller
     *  @return boolean 
     */
     public function assertNameSize($name , & $errors){
-        define("MINSIZENAME" , "3"); // Lenght of course name must be bigger than 3;
-        define("ERRORNAMESIZE" , "Nome do curso deve possuir mais que 2 caracteres");
+
         $sizeName = strlen($name);
 
         $validName = false;
 
-        if ($sizeName >= MINSIZENAME){
+        if ($sizeName >= self::MINSIZENAME){
             $validName = true;
         }else{
-            array_push($errors , ERRORNAMESIZE);
+            array_push($errors , self::ERRORNAMESIZE);
             $validName = false;
         }
         return $validName;
@@ -378,12 +413,11 @@ class CoursesController extends Controller
 
 
     public function assertOnlyNumbers($id , & $errors){
-        define('NOTONLYNUMBERS' , 'Deve conter apenas número no ID');
 
         if (is_numeric($id)){
             return true;
         }else{
-            array_push($errors , NOTONLYNUMBERS );
+            array_push($errors , self::NOTONLYNUMBERS );
             return false;
         }
         
@@ -397,22 +431,19 @@ class CoursesController extends Controller
     *                                false if is not correct
     */
     public function assertSizeIdIsSix($id , & $errors){
-        define("IDSIZE" , "6"); // ID MUST contain only 6 numbers
-        define("ERRORIDSIZE" , "Tamanho do ID deve ser 6");
-        define("LOG_ID_VALID" , "The size of id is valid");
-        define("LOG_ID_INVALID" , "The size of if is invalid");
+        
 
         $idSize = strlen ($id);
         $validSize = false;
 
-        if ($idSize == IDSIZE ){
+        if ($idSize == self::IDSIZE ){
 
-            Log::info(LOG_ID_VALID);
+            Log::info(self::LOG_ID_VALID);
             $validSize = true;
         }else{
 
-            Log::warning(LOG_ID_INVALID);
-            array_push($errors, ERRORIDSIZE);
+            Log::warning(self::LOG_ID_INVALID);
+            array_push($errors, self::ERRORIDSIZE);
             $validSize =false;
         }
 
@@ -427,7 +458,6 @@ class CoursesController extends Controller
     */
     public function filter(Request $request)
     {   
-        define("VARIABLE_TO_SEND" , "courses");
 
         $id = request('id');
         $name = request('name');
@@ -446,7 +476,7 @@ class CoursesController extends Controller
         }        
             
 
-        return view('/courses/index' , compact(VARIABLE_TO_SEND));
+        return view('/courses/index' , compact(self::VARIABLE_TO_SEND));
 
     }
 
