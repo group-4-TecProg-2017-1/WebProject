@@ -43,7 +43,7 @@ class MonitoringsController extends Controller
         $selectedMonitors = User::first()->user_id;
 
 
-        return view('monitorings.create', compact('locations', 'selectedLocation','courses', 
+        return view('monitorings.create', compact('locations', 'selectedLocation','courses',
             'selectedCourse','monitors','selectedMonitors'));
     }
 
@@ -108,6 +108,9 @@ class MonitoringsController extends Controller
      */
     public function destroy($id)
     {
-        //
+      $monitoring = Monitoring::find($id);
+      $monitoring->delete();
+
+      return redirect('monitorings')->with('status', 'Sucessfuly deleted locations!');
     }
 }
