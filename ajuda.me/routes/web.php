@@ -42,7 +42,7 @@ Route::get('/courses', 'CoursesController@index')
 Route::get('/courses/create', 'CoursesController@createCourseView')
     ->middleware('auth');
 
-Route::post('/courses', 'CoursesController@storeCourseOnDatabase')
+Route::post('/courses', 'CoursesController@validateCourseToCreate')
     ->middleware('auth');
 
 Route::get('/courses/{course_id}', 'CoursesController@show')
@@ -53,7 +53,7 @@ Route::get('/courses/{course_id}/edit', 'CoursesController@edit')
 
 Route::get('/course/{course_id}','CoursesController@delete');
 
-Route::get('/courses/edit/{course_id}','CoursesController@editCourse');
+Route::get('/courses/edit/{course_id}','CoursesController@getCoursesdatasOnDatabase');
 
 Route::post('/courses/edit', 'CoursesController@validateIfCourseCanBeUpdated');
 

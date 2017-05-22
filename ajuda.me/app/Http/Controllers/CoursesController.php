@@ -31,17 +31,19 @@ class CoursesController extends Controller
     const OLD_COURSE_ID ='old_id';
     const COURSEFOUND = "Existe outro curso cadastrado com esse ID"; //course have been found on database
     const URL_TO_COURSES = "/courses";
-    const FOUND_COURSE = "Curso foi encontrado.";
-    const COURSE_NOT_FOUND = "Curso não foi encontrado.";
+    const FOUND_COURSE = "Course has been found";
+    const COURSE_NOT_FOUND = "Course hasn't been found";
+    const EDIT_PAGE =  "/courses/edit";
     
     // block of log's message
     const LOG_DELETED_COURSE = "Course has been deleted on database";
     const LOG_ID_VALID = "The size of id is valid"; // log to tell the that id is validated
     const LOG_ID_INVALID = "The size of id is invalid"; // error log of id's size 
-    const LOG_INDEX_REACHED  = "Course view reached (index).";
+    const LOG_INDEX_REACHED  = "Course view reached (method tha called view:index).";
     const LOG_COURSE_VIEW = "View of course creation (create.blade)"; 
     const LOG_EDIT_PAGE = "Edit page reached";
     const LOG_VALID_COURSE = "All datas are validated, course can be created";
+    const COURSE_SUCESSFULLY_CREATED = "Course could be created and saved on database";
 
 
     /**
@@ -75,6 +77,7 @@ class CoursesController extends Controller
         return view($create_courses_view);
     }
 
+
     /**
     *  Validate the data of the request (id and course's name)
     *
@@ -82,8 +85,12 @@ class CoursesController extends Controller
     * @return boolean $valid_datas
     *
     */
-    public function validateRequestDatasToCreateCourse(Request $request)
+    private function validateRequestDatas(Request $request , & $errors)
     {
+        // get inputed ID and NAME to validate
+        $id = request('id');
+        $name = request('name');
+
         // block validate id's conditions
         $numericId = self::assertOnlyNumbers($id , $errors); 
         $sixNumbersId = self::assertSizeIdIsSix($id , $errors);
@@ -94,41 +101,60 @@ class CoursesController extends Controller
         // check if course exist on database
         $courseCanBeCreated = self::courseCanBeCreated($id , $errors);
 
+        $allValidated = false;
 
+        $validating_courses_data = 'Could get (all id, valid name, existence of course) validations';
+        Log::info($validating_courses_data);
 
+        if($numericId && $sixNumbersId && $validSizeName && $courseCanBeCreated){
+            $allValidated = true;
+        }else{
+            $allValidated = false;
+        }
+        return $allValidated;
     }
 
 
     /**
-    * Store a newly created resource in database.
+    * Ensure datas are validated and create course in database
     *
     * @param  \Illuminate\Http\Request  $request
     * @return \Illuminate\Http\Response
     */
-    public function storeCourseOnDatabase(Request $request)
+    public function validateCourseToCreate(Request $request)
     {
-        
-        $id = request('id');
-        $errors = array();
-        $name = request('name');
-
-        
-
+    
+        $errors = array(); // keep the logs of errors
+        $courseCanBeCreated = self::validateRequestDatas($request , $errors);
         Log::info(self::LOG_VALID_COURSE);
-        
-        $pageSelected = null;
-        if ($numericId && $sixNumbersId && $id != null && $validSizeName 
-            && $name != null && $courseCanBeCreated){
 
-            Course::create(['id' => request('id'),'name' => request('name')]);
+
+        $pageSelected = null;
+        if ($courseCanBeCreated){
+            self::storeNewCourseOnDatabase($request);
             $pageSelected = redirect('/courses');
         }else{
             $pageSelected = view('/courses/create' , compact('errors'));
         }
         return $pageSelected;
-
     }
 
+
+    /**
+    *   Store a newly created resource in database.
+    *   @param \Illuminate\Http\Request  $request
+    *   @return void
+    */
+    private function storeNewCourseOnDatabase(Request $request){
+
+        // get inputed ID and NAME to validate
+        $id = request('id');
+        $name = request('name');
+
+        Course::create(['id' => $id,'name' => $name]);
+        Log::info(self::COURSE_SUCESSFULLY_CREATED);
+    }
+    
 
     /**
     * Validate if course can be created based on search on database
@@ -146,7 +172,7 @@ class CoursesController extends Controller
 
             $courseCanBeCreated = true;
         }else{
-            
+
             array_push($errors , self::COURSEFOUND);
             $courseCanBeCreated = false;
         }
@@ -200,31 +226,42 @@ class CoursesController extends Controller
     }
 
 
-    /*
-    *
-    *
+    /**
+    *   Search the course on database by id to redirect to courses's edit page
+    *   @param int $course_id
+    *   @return \Illuminate\Http\Response $editCoursePage
     *
     */
-    public function editCourse($course_id)
+    public function getCoursesdatasOnDatabase($course_id)
     {
 
         Log::info(self::LOG_EDIT_PAGE);
 
         $course= self::searchCourse($course_id);
 
+        // set name and id of course that is going to be updated on array
         $oneCourse = array('course_id' => $course_id ,
                            'name' => $course->name);
         
-        return view('/courses/edit' , $oneCourse );
+        $editCoursePage = view( self::EDIT_PAGE , $oneCourse);
+
+        return $editCoursePage;
         
     }
 
-    public function searchCourse($course_id)
+    /*
+    *   Search the course on database by the given id
+    *   @param int $course_id
+    *   @return App/Course $course , if course is not found, return is null
+    *
+    */
+    private function searchCourse($course_id)
     {
         $course = null;
         $course= Course::where('id', (integer) $course_id)->first();
         return $course;
     }
+
 
     private function assertElementsOfRequestAreValid(Request $request , & $errors){
 
@@ -249,7 +286,7 @@ class CoursesController extends Controller
     }
 
 
-    /**
+    /*
     *   Validate if name is valid, verify if size is more than 2 
     *   @param int $name , name of selected course
     *   @param Array $errors , contains all errors strings to store courses
@@ -272,7 +309,7 @@ class CoursesController extends Controller
     }
 
 
-    /**
+    /*
     *   Validate if ID is valid, verify size and if contains only numbers
     *   @param int $id
     *   @param Array $errors , contains all errors strings to store courses
@@ -294,7 +331,7 @@ class CoursesController extends Controller
     }
 
 
-    /**
+    /*
     * Update the information of courses 
     * @param \Illuminate\Http\Request , is a form with name, id and old id information of course
     * @return \Illuminate\Http\Response , a view to the user
@@ -390,13 +427,13 @@ class CoursesController extends Controller
     }
      
 
-    /** 
+    /*
     * Verify if the size name is bigger than minimal size (2) and insert log of error if is not
     *  @param int $name  , name of a course
     *  @param array $errors , array of errors to create and update a course
     *  @return boolean 
     */
-    public function assertNameSize($name , & $errors){
+    private function assertNameSize($name , & $errors){
 
         $sizeName = strlen($name);
 
@@ -411,8 +448,13 @@ class CoursesController extends Controller
         return $validName;
     }
 
-
-    public function assertOnlyNumbers($id , & $errors){
+    /*
+    * Verify if id contains only numbers
+    *  @param int $id  , name of a course
+    *  @param array $errors , array of errors to create and update a course
+    *  @return boolean 
+    */
+    private function assertOnlyNumbers($id , & $errors){
 
         if (is_numeric($id)){
             return true;
@@ -423,14 +465,15 @@ class CoursesController extends Controller
         
     }
 
-    /**
+
+    /*
     * Assert the size of id id 6
     * @param int $id , id of course
     * @param array $errors , An array to add errors if they exist
     * @return boolean $validCourse , true if the size if correct , 
     *                                false if is not correct
     */
-    public function assertSizeIdIsSix($id , & $errors){
+    private function assertSizeIdIsSix($id , & $errors){
         
 
         $idSize = strlen ($id);
@@ -469,15 +512,17 @@ class CoursesController extends Controller
 
             if (request('id') != null ){
                 $courses = Course::where('id' , (integer)$id)->get();
+            }else{
+                // nothing to do
             }
             if (request('name') != null){
                 $courses = Course::where('name' , (string) $name)->get();
-            } 
+            }else{
+                // nothing to do
+            }
         }        
             
-
         return view('/courses/index' , compact(self::VARIABLE_TO_SEND));
-
     }
 
     
