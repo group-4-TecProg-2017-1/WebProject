@@ -48,6 +48,9 @@ Route::post('/monitorings', 'MonitoringsController@store')
 Route::get('/monitorings/{monitorings_id}/edit', 'MonitoringsController@edit')
     ->middleware('auth');
 
+Route::get('/monitorings/{id}/delete', 'MonitoringsController@destroy')
+    ->middleware('auth');
+
 Route::get('/courses', 'CoursesController@index')
     ->middleware('auth');
 
