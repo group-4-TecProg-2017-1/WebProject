@@ -1,12 +1,6 @@
 before_script:
   - php artisan migrate
-  - composer require atoum/atoum
 
-script: vendor/bin/atoum
-
-install:
-  - ./bin/ci/install_dependencies.sh
-  - php vendor/vendors.php
 
 language: php
 php:
