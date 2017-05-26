@@ -1,0 +1,19 @@
+before_script:
+  - php artisan migrate
+  - composer require atoum/atoum
+
+script: vendor/bin/atoum
+
+install:
+  - ./bin/ci/install_dependencies.sh
+  - php vendor/vendors.php
+
+language: php
+php:
+  - '5.4'
+  - '5.5'
+  - '5.6'
+  - '7.0'
+  - '7.1'
+  - hhvm
+  - nightly
