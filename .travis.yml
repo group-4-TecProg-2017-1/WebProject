@@ -1,12 +1,22 @@
-before_script:
-  - composer require atoum/atoum
-
-script: phpunit --configuration $DB.phpunit.xml
-
 language: php
+
 php:
   - '7.0'
   - '7.1'
+
+
+before_script:
+  - cp .env.travis .end
+  - mysql -e 'create database homestead_test;'
+  - composer self-update
+- composer install --no-interaction
+
+
+
+script: 
+  - vendor/bin/phpunit
+  - phpunit --configuration $DB.phpunit.xml
+
  
 
 
