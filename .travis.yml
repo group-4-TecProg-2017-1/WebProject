@@ -1,5 +1,4 @@
 before_script:
-  - php artisan migrate
   - composer require atoum/atoum
 
 script: vendor/bin/atoum
@@ -17,3 +16,5 @@ php:
   - '7.1'
   - hhvm
   - nightly
+
+
