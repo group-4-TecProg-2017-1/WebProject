@@ -1,6 +1,7 @@
 before_script:
   - composer require atoum/atoum
 
+script: phpunit --configuration $DB.phpunit.xml
 
 language: php
 php:
