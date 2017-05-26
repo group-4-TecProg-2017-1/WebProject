@@ -45,10 +45,13 @@ Route::get('/monitorings/create', 'MonitoringsController@create')
 Route::post('/monitorings', 'MonitoringsController@store')
     ->middleware('auth');
 
-Route::get('/monitorings/{monitorings_id}/edit', 'MonitoringsController@edit')
+Route::get('/monitorings/{id}/delete', 'MonitoringsController@destroy')
     ->middleware('auth');
 
-Route::get('/monitorings/{id}/delete', 'MonitoringsController@destroy')
+Route::get('/monitorings/{id}/edit', 'MonitoringsController@edit')
+    ->middleware('auth');
+
+Route::put('/monitorings/{id}', 'MonitoringsController@update')
     ->middleware('auth');
 
 Route::get('/courses', 'CoursesController@index')
