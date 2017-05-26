@@ -97,7 +97,16 @@ class MonitoringsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $monitoring = Monitoring::find($id);
+        $monitoring->id = request('id');
+        $monitoring->contentApproached = request('contentApproached');
+        $monitoring->type = request('type');
+        $monitoring->startTime = request('startTime');
+        $monitoring->duration = request('duration');
+        $monitoring->id_location = request('location_id');
+        $monitoring->id_courses = request('course_id');
+
+        return redirect('/monitorings')->with('status', 'Successfuly updated monitoring!');
     }
 
     /**
