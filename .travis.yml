@@ -4,7 +4,6 @@ before_script:
 script: vendor/bin/atoum
 
 install:
-  - ./bin/ci/install_dependencies.sh
   - php vendor/vendors.php
 
 language: php
