@@ -120,6 +120,6 @@ class MonitoringsController extends Controller
       $monitoring = Monitoring::find($id);
       $monitoring->delete();
 
-      return redirect('monitorings')->with('status', 'Sucessfuly deleted locations!');
+      return redirect('monitorings')->with('status', 'Sucessfuly deleted Monitorings!');
     }
 }
