@@ -7,8 +7,9 @@
             <div class="panel panel-default">
                 <div class="panel-heading">Create Monitoring</div>
                 <div class="panel-body">
-                    <form class="" action="/monitorings" method="POST">
+                    <form class="form-horizontal" role="form" action="/monitorings/{{ $monitoring->id }}" method="POST">
                         {{ csrf_field() }}
+                        {{ method_field('PUT') }}
 
                         <div class="form-group">
                             <label for="inputContentApproached">Content Approached:</label>
@@ -68,7 +69,16 @@
                             </select>
                         </div>
 
-                        <button type="submit" class="btn btn-primary">Create</button>
+                        <div class="form-group">
+                            <div class="col-md-6 col-md-offset-4">
+                                <button type="submit" class="btn btn-primary">
+                                    Update
+                                </button>
+                                <a href="/users" class="btn">
+                                    Cancel
+                                </a>
+                            </div>
+                        </div>
                     </form>
                 </div>
             </div>
