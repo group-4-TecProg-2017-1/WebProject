@@ -84,8 +84,19 @@ class MonitoringsController extends Controller
      */
     public function edit($id)
     {
-        $monitoring = Monitoring::find($id);
-        return view('monitorings.edit', compact('monitoring'));
+      $locations = Location::orderBy('id', 'asc')->get();
+      $selectedLocation = User::first()->location_id;
+
+      $courses = Course::orderBy('id', 'asc')->get();
+      $selectedCourse = User::first()->course_id;
+
+      $monitors = User::where('role', 'monitor')->get();
+      $selectedMonitors = User::first()->user_id;
+
+      $monitoring = Monitoring::find($id);
+
+        return view('monitorings.edit', compact('monitoring', 'locations', 'selectedLocation','courses',
+            'selectedCourse','monitors','selectedMonitors'));
     }
 
     /**
@@ -105,6 +116,7 @@ class MonitoringsController extends Controller
         $monitoring->duration = request('duration');
         $monitoring->id_location = request('location_id');
         $monitoring->id_courses = request('course_id');
+        $monitoring->save();
 
         return redirect('/monitorings')->with('status', 'Successfuly updated monitoring!');
     }
