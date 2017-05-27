@@ -1,11 +1,15 @@
 before_script:
   - composer require atoum/atoum
-
+  - "composer install"
 
 language: php
 php:
   - '7.0'
   - '7.1'
+  - hhvm
+
+script:
+  - "phpunit --testsuite=unit --coverage-text --coverage-clover build/logs/clover.xml"
  
 
 
