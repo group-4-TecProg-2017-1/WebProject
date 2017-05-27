@@ -1,6 +1,6 @@
 before_script:
   - composer require atoum/atoum
-  - "composer install"
+
 
 language: php
 php:
