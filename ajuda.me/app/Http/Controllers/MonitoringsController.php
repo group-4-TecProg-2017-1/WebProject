@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Monitoring;
-use App\Monitor;
+use App\Location;
+use App\User;
+use App\Course;
+use Log;
 
 class MonitoringsController extends Controller
 {
@@ -16,8 +19,11 @@ class MonitoringsController extends Controller
     public function index()
     {
         $monitorings = Monitoring::orderBy('id', 'asc')->get();
+        $locations = Location::orderBy('id', 'asc')->get();
+        $courses = Course::orderBy('id', 'asc')->get();
+        $selectedCourse = User::first()->course_id;
 
-        return view('monitorings.index', compact('monitorings'));
+        return view('monitorings.index', compact('monitorings', 'courses', 'locations', 'selectedCourse'));
     }
 
     /**
@@ -27,7 +33,18 @@ class MonitoringsController extends Controller
      */
     public function create()
     {
-        return view('monitorings.create');
+        $locations = Location::orderBy('id', 'asc')->get();
+        $selectedLocation = User::first()->location_id;
+
+        $courses = Course::orderBy('id', 'asc')->get();
+        $selectedCourse = User::first()->course_id;
+
+        $monitors = User::where('role', 'monitor')->get();
+        $selectedMonitors = User::first()->user_id;
+
+
+        return view('monitorings.create', compact('locations', 'selectedLocation','courses',
+            'selectedCourse','monitors','selectedMonitors'));
     }
 
     /**
@@ -38,26 +55,25 @@ class MonitoringsController extends Controller
      */
     public function store(Request $request)
     {
-        Monitoring::create([
-          'id' => request('id'),
-          'place' => request('place'),
-          'contentApproached' => request('contentApproached'),
-          'durationTime' => request('durationTime'),
-          'startTime' => request('startTime')
-        ]);
 
-        return redirect('/monitorings');
-    }
+        $monitoring = new Monitoring;
 
-    /**
-     * Display the specified monitoring.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($monitoring_id)
-    {
-        //
+        $monitoring->id = request('id');
+        $monitoring->contentApproached = request('contentApproached');
+        $monitoring->type = request('type');
+        $monitoring->startTime = request('startTime');
+        $monitoring->duration = request('duration');
+        $monitoring->id_location = request('location_id');
+        $monitoring->id_courses = request('course_id');
+
+        $monitoring->save();
+
+        foreach (request('monitors') as $monitor) {
+            $monitoring -> monitors() -> attach($monitor);
+        }
+
+
+        return redirect('/monitorings')->with('status', 'Successfuly created Monitoring!');
     }
 
     /**
@@ -68,7 +84,19 @@ class MonitoringsController extends Controller
      */
     public function edit($id)
     {
-        //
+      $locations = Location::orderBy('id', 'asc')->get();
+      $selectedLocation = User::first()->location_id;
+
+      $courses = Course::orderBy('id', 'asc')->get();
+      $selectedCourse = User::first()->course_id;
+
+      $monitors = User::where('role', 'monitor')->get();
+      $selectedMonitors = User::first()->user_id;
+
+      $monitoring = Monitoring::find($id);
+
+        return view('monitorings.edit', compact('monitoring', 'locations', 'selectedLocation','courses',
+            'selectedCourse','monitors','selectedMonitors'));
     }
 
     /**
@@ -80,7 +108,17 @@ class MonitoringsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $monitoring = Monitoring::find($id);
+        $monitoring->id = request('id');
+        $monitoring->contentApproached = request('contentApproached');
+        $monitoring->type = request('type');
+        $monitoring->startTime = request('startTime');
+        $monitoring->duration = request('duration');
+        $monitoring->id_location = request('location_id');
+        $monitoring->id_courses = request('course_id');
+        $monitoring->save();
+
+        return redirect('/monitorings')->with('status', 'Successfuly updated monitoring!');
     }
 
     /**
@@ -91,6 +129,9 @@ class MonitoringsController extends Controller
      */
     public function destroy($id)
     {
-        //
+      $monitoring = Monitoring::find($id);
+      $monitoring->delete();
+
+      return redirect('monitorings')->with('status', 'Sucessfuly deleted Monitorings!');
     }
 }

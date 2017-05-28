@@ -12,7 +12,7 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('home');
 })->middleware('auth');
 
 Route::get('/locations', 'LocationsController@index')
@@ -34,6 +34,24 @@ Route::put('/locations/{location_id}', 'LocationsController@update')
     ->middleware('auth');
 
 Route::get('/locations/{locations_id}/delete', 'LocationsController@destroy')
+    ->middleware('auth');
+
+Route::get('/monitorings', 'MonitoringsController@index')
+    ->middleware('auth');
+
+Route::get('/monitorings/create', 'MonitoringsController@create')
+    ->middleware('auth');
+
+Route::post('/monitorings', 'MonitoringsController@store')
+    ->middleware('auth');
+
+Route::get('/monitorings/{id}/delete', 'MonitoringsController@destroy')
+    ->middleware('auth');
+
+Route::get('/monitorings/{id}/edit', 'MonitoringsController@edit')
+    ->middleware('auth');
+
+Route::put('/monitorings/{id}', 'MonitoringsController@update')
     ->middleware('auth');
 
 Route::get('/courses', 'CoursesController@index')
