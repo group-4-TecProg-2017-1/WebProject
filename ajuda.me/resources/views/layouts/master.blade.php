@@ -12,6 +12,7 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/chosen.css') }}" rel="stylesheet">
 
     <!-- Scripts -->
     <script>
@@ -29,5 +30,9 @@
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}"></script>
+    <script src="{{ asset('js/chosen.jquery.js') }}"></script>
+    <script src="{{ asset('js/prism.js') }}"></script>
+    <script src="{{ asset('js/init.js') }}"></script>
+
 </body>
 </html>
