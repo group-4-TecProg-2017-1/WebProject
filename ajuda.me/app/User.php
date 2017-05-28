@@ -30,4 +30,12 @@ class User extends Authenticatable
     {
         $this->name = $name;
     }
+    public function setUserID($user_id)
+    {
+      $this->user_id = $user_id;
+    }
+    public function getUserID()
+    {
+      return $this->user_id;
+    }
 }
