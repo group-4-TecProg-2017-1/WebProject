@@ -58,8 +58,11 @@
                                                     </div>
 
                                                     <a class="small" href="{{ route('password.request') }}">
-                                                            <h5>Forgot Your Password?</h5>
-                                                        </a>
+                                                        <h5>Forgot Your Password?</h5>
+                                                    </a>
+                                                    <a class="small" href="/register">
+                                                        <h5>Register</h5>
+                                                    </a>
                                                 </div>
                                             </form>    
                                         </div>
