@@ -21,15 +21,22 @@
             <ul class="nav navbar-nav">
                 @if ($user = Auth::user())
                 <li><a href="/users">Users</a></li>
-                <li><a href="/courses">Courses</a></li>
-                <li><a href="/locations">Locations</a></li>
 
-                    @if(strcmp($user->role, 'student') != 0 )
-                    <li><a href="/monitorings">Monitoring</a></li>
+                    @if(strcmp($user->role , 'admin') == 0)
+                        <li><a href="/courses">Courses</a></li>
                     @else
                         <!-- nothing to do -->
                     @endif
-                <li><a href="">Study Group</a></li>
+
+                <li><a href="/locations">Locations</a></li>
+
+                    @if(strcmp($user->role, 'student') != 0 )
+                        <li><a href="/monitorings">Monitoring</a></li>
+                    @else
+                        <!-- nothing to do -->
+                    @endif
+
+                <li><a href="/study_group">Study Group</a></li>
 
                 @else
                 <!-- Nothing to show -->

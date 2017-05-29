@@ -8,6 +8,8 @@
                 <div class="panel-heading">Courses
                 </div>
                 <div>
+                </div>
+                <div>
                     <form action="/courses/filter" method="POST"> 
                         {{ csrf_field() }}
                         <div class="col-md-3" >

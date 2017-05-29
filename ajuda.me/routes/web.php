@@ -116,3 +116,4 @@ Route::get('/monitorings', 'MonitoringsController@createOptionView')
 Auth::routes();
 
 Route::get('/home', 'HomeController@index');
+Route::get('/study_group' , 'StudyGroupController@index');
