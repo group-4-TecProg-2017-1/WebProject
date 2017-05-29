@@ -19,20 +19,28 @@ class CoursesController extends Controller
      */
     public function index()
     {
-        $courses = Course::orderBy('id', 'asc')->get();
+        define("LOG_MESSAGE" , 'Course view reached (index).');
+        Log::info(LOG_MESSAGE);
 
+        $courses = Course::orderBy('id', 'asc')->get();
+        
         return view('courses.index', compact('courses'));
     }
+
 
     /**
      * Show the form for creating a new course.
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function createCourseView()
     {
+        define("LOG_COURSE_VIEW" , "View of course creation (create.blade)");
+        Log::info(LOG_COURSE_VIEW);
+
         return view('courses.create');
     }
+
 
     /**
      * Store a newly created resource in database.
@@ -40,8 +48,9 @@ class CoursesController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function storeCourseOnDatabase(Request $request)
     {
+        define("LOG_VALID_COURSE", "All datas are validated, course can be created");
         $id = request('id');
         $errors = array();
 
@@ -53,6 +62,8 @@ class CoursesController extends Controller
         $validSizeName = self::assertNameSize($name , $errors);
 
         $courseCanBeCreated = self::courseCanBeCreated($id , $errors);
+
+        Log::info(LOG_VALID_COURSE);
         
         $pageSelected = null;
         if ($numericId && $sixNumbersId && $id != null && $validSizeName 
@@ -68,6 +79,13 @@ class CoursesController extends Controller
     }
 
 
+    /**
+    * Validate if course can be created based on search on database
+    * @param int $id , id of course
+    * @param array $errors , array to add errors that don't let course be created
+    * @return bool $courseCanBeCreated , true if course id dont exist on database and can be created,
+    *                                    false if course id exit and can't be created
+    */
     public function courseCanBeCreated($id , & $errors){
         define('COURSEFOUND' , "Existe outro curso cadastrado com esse ID");
 
@@ -104,58 +122,46 @@ class CoursesController extends Controller
         return view('courses.show', compact('course', 'monitoring', 'monitors'));
     }
 
-    /**
-     * Show the form for editing the specified course.
-     *
-     * @param  int  $course_id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($course_id)
-    {
-        //
-    }
+   
 
+    
     /**
-     * Update the specified course in database.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $course_id
-     * @return \Illuminate\Http\Response
-    public function update(Request $request, $id)
-    {
-        //
-    }
-     */
-
-    /**
-     * Remove the specified course from database.
-     *
-     * @param  int  $course_id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($course_id)
-    {
-        //
-    }
-
+    * Funtion to delete course on database by id
+    * @param int $course_id , id o course to delete
+    * @return \Illuminate\Http\Response
+    *
+    */
     public function delete($course_id)
     {
-    
-        Course::find($course_id)->delete();
-        return redirect('/courses');
+        define('PAGE_TO_REDIRECT' , "/courses");
+        define('LOG_DELETED_COURSE' , "Course has been deleted on database");
+        define("FOUND_COURSE" , "Course has been found");
+        define("COURSE_NOT_FOUND" , "Course has not been found");
+
+        $foundCourse = Course::find($course_id)->get();
+
+        if ($foundCourse != null){
+            Log:info(FOUND_COURSE);
+            Course::find($course_id)->delete();
+        }else{
+            Log::warning(COURSE_NOT_FOUND);
+        }
+
+        return redirect(PAGE_TO_REDIRECT);
         
     }
-/*
-    public function search($course_id)
-    {
-        $course = DB::table('courses')->where('id', course_id)->first();
 
-        echo $user->name;
 
-    }
+    /*
+    *
+    *
+    *
     */
     public function editCourse($course_id)
     {
+        define("LOG_EDIT_PAGE" , "Edit page reached");
+        Log::info(LOG_EDIT_PAGE);
+
         $course= self::searchCourse($course_id);
 
         $oneCourse = array('course_id' => $course_id ,
@@ -248,9 +254,7 @@ class CoursesController extends Controller
     * Update the information of courses 
     * @param \Illuminate\Http\Request , is a form with name, id and old id information of course
     * @return \Illuminate\Http\Response , a view to the user
-    */
-
-    
+    */    
     public function validateIfCourseCanBeUpdated(Request $request)
     {   
         define('REDIRECTCOURSES' , '/courses');
@@ -332,6 +336,8 @@ class CoursesController extends Controller
         return $nextPage;
     }
 
+
+
     private function assertCourseDontExist($actualCourseName , $actualCourseId , & $errors){
 
         define("ERROR_COURSE_EXIST" , "Outro curso já está cadastrado com esse ID");
@@ -370,6 +376,7 @@ class CoursesController extends Controller
         return $validName;
     }
 
+
     public function assertOnlyNumbers($id , & $errors){
         define('NOTONLYNUMBERS' , 'Deve conter apenas número no ID');
 
@@ -382,24 +389,46 @@ class CoursesController extends Controller
         
     }
 
-
+    /**
+    * Assert the size of id id 6
+    * @param int $id , id of course
+    * @param array $errors , An array to add errors if they exist
+    * @return boolean $validCourse , true if the size if correct , 
+    *                                false if is not correct
+    */
     public function assertSizeIdIsSix($id , & $errors){
         define("IDSIZE" , "6"); // ID MUST contain only 6 numbers
         define("ERRORIDSIZE" , "Tamanho do ID deve ser 6");
+        define("LOG_ID_VALID" , "The size of id is valid");
+        define("LOG_ID_INVALID" , "The size of if is invalid");
 
         $idSize = strlen ($id);
+        $validSize = false;
 
         if ($idSize == IDSIZE ){
-            return true;
+
+            Log::info(LOG_ID_VALID);
+            $validSize = true;
         }else{
+
+            Log::warning(LOG_ID_INVALID);
             array_push($errors, ERRORIDSIZE);
-            return false;
+            $validSize =false;
         }
+
+        return $validSize;
     }
 
 
+    /**
+    * Filter the courses by id or by name
+    * @param \Illuminate\Http\Request , is a form with name and id of course
+    * @return \Illuminate\HttpzRequest , view of filtered courses
+    */
     public function filter(Request $request)
     {   
+        define("VARIABLE_TO_SEND" , "courses");
+
         $id = request('id');
         $name = request('name');
 
@@ -417,7 +446,7 @@ class CoursesController extends Controller
         }        
             
 
-        return view('/courses/index' , compact('courses'));
+        return view('/courses/index' , compact(VARIABLE_TO_SEND));
 
     }
 

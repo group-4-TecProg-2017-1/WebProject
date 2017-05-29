@@ -1,0 +1,18 @@
+language: php
+
+php:
+  - '7.0'
+  - '7.1'
+
+
+before_script:
+  - cp .env.travis .end
+  - mysql -e 'create database homestead_test;'
+  - composer self-update
+
+script: 
+  - composer require atoum/atoum
+
+ 
+
+

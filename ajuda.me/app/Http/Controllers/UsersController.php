@@ -4,9 +4,18 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\User;
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
 
 class UsersController extends Controller
-{
+{   
+    public $log;
+    public function __construct()
+    {
+        $this->log = new Logger('my_app');
+        $this->log->pushHandler(new StreamHandler(__DIR__.'/my_app.log', Logger::DEBUG));
+    }
+
     /**
      * Display a listing of the users.
      *
@@ -15,7 +24,7 @@ class UsersController extends Controller
     public function index()
     {
         $users = User::orderBy('id', 'asc')->get();
-
+        $this->log->info('Got users successfully');
         return view('users.index', compact('users'));
     }
 

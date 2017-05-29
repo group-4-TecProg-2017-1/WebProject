@@ -46,9 +46,7 @@
                                     {{ $course->id }}
                                 </td>
                                 <td width="50%">
-                                    <a href="/courses/{{$course->id}}">
-                                        {{ $course->name }}
-                                    </a>
+                                    {{ $course->name }}
                                 </td>
                             </tr>
                         @endforeach
