@@ -7,8 +7,13 @@ use App\User;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
 
+/**
+ * This class receives requests from views, retrieves requested information
+ * from database and redirect to views.
+ *
+ */
 class UsersController extends Controller
-{   
+{
     public $log;
     public function __construct()
     {
@@ -117,5 +122,4 @@ class UsersController extends Controller
 
         return redirect('/users')->with('status', 'Sucessfuly deleted user!');
     }
-
 }
