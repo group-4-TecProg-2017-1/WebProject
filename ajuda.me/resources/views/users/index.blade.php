@@ -41,7 +41,7 @@
                 </div>
 
                 <div class="panel-body">
-                  <a href="/users/create">Create new user</a>
+                  <a class="btn btn-success" href="/users/create">Create new user</a>
                 </div>
 
             </div>

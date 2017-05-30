@@ -57,9 +57,18 @@
 
                 </div>
 
-                <div class="panel-body">
-                  <a href="/monitorings/create">Create new monitoring</a>
-                </div>
+                @if ($user = Auth::user())
+                    @if(strcmp($user->role , 'student') != 0)
+
+                        <div class="panel-body">
+                          <a class="btn btn-success" href="/monitorings/create">Create new monitoring</a>
+                        </div>
+                       
+                    @else
+                        <!-- nothing to show -->
+                    @endif
+                @endif
+
             </div>
         </div>
     </div>

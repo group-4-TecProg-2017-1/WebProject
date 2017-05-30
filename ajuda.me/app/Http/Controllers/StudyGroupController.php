@@ -20,4 +20,6 @@ class StudyGroupController extends Controller
         
         return view('study_group.index', compact('courses'));
     }
+
+    
 }

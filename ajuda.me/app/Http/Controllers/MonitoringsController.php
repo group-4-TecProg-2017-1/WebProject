@@ -22,7 +22,6 @@ class MonitoringsController extends Controller
         $locations = Location::orderBy('id', 'asc')->get();
         $courses = Course::orderBy('id', 'asc')->get();
         $selectedCourse = User::first()->course_id;
-
         return view('monitorings.index', compact('monitorings', 'courses', 'locations', 'selectedCourse'));
     }
 

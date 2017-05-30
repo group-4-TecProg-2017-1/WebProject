@@ -423,7 +423,7 @@ class CoursesController extends Controller
     /**
     * Filter the courses by id or by name
     * @param \Illuminate\Http\Request , is a form with name and id of course
-    * @return \Illuminate\HttpzRequest , view of filtered courses
+    * @return \Illuminate\Http\Request , view of filtered courses
     */
     public function filter(Request $request)
     {   
@@ -449,6 +449,7 @@ class CoursesController extends Controller
         return view('/courses/index' , compact(VARIABLE_TO_SEND));
 
     }
+
 
     
 

@@ -40,9 +40,17 @@
 
                 </div>
 
-                <div class="panel-body">
-                  <a href="/locations/create">Create new location</a>
-                </div>
+                @if ($user = Auth::user())
+                    @if(strcmp($user->role , 'student') != 0)
+
+                        <div class="panel-body">
+                          <a class="btn btn-success" href="/locations/create">Create new location</a>
+                        </div>
+                       
+                    @else
+                        <!-- nothing to show -->
+                    @endif
+                @endif
 
             </div>
         </div>

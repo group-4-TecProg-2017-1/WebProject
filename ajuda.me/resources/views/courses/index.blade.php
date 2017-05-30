@@ -54,12 +54,18 @@
                         @endforeach
                     </table>
                 </div>
+                 @if ($user = Auth::user())
+                    @if(strcmp($user->role , 'student') != 0)
 
-                <div class="panel-body" >
-                    <a href="/courses/create" class="btn btn-success" >
-                        Create new course
-                    </a>
-                </div>
+                        <div class="panel-body" >
+                            <a href="/courses/create" class="btn btn-success" >
+                                Create new course
+                            </a>
+                        </div>
+                    @else
+                        <!-- nothing to show -->
+                    @endif
+                @endif
 
             </div>
         </div>
