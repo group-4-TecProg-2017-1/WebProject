@@ -14,12 +14,15 @@
                 <div class="panel-heading">Users</div>
 
                 <div class="panel-body">
+                    <!-- If there are users in database -->
                     @if (count($users) != 0)
                         <table>
                             <th width="20%">Name</th>
                             <th width="40%">Email</th>
                             <th width="20%">Role</th>
                             <th width="20%" colspan="2">Actions</th>
+                            <!-- Retrieves information for each user in
+                            database -->
                             @foreach ($users as $user)
                                 <tr>
                                     <td>{{$user->name}}</td>
@@ -35,9 +38,9 @@
                             @endforeach
                         </table>
                     @else
-                        <!-- Nothing to do -->
+                        <!-- Nothing will be showed if there isn't users in
+                        database -->
                     @endif
-
                 </div>
 
                 <div class="panel-body">
