@@ -17,9 +17,11 @@ class StudyGroupController extends Controller
     public function index()
     {
         Log::info(self::LOG_MESSAGE);
+
+        
         
         return view('study_group.index', compact('courses'));
     }
 
-    
+
 }

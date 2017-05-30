@@ -27,6 +27,7 @@
                     <li><a href="/monitorings">Monitoring</a></li>
                     <li><a href="/study_group">Study Group</a></li>
 
+
                 @else
                 <!-- Nothing to show -->
                 @endif
