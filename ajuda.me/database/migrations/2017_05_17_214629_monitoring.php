@@ -25,6 +25,25 @@ class Monitoring extends Migration
           $table->foreign('id_courses')->references('id')->on('courses');
           $table->timestamps();
         });
+
+
+        /**
+        * Create table of study group 
+        *
+        * @return void
+        */
+        Schema::create('study_groups' , function (Blueprint $table){
+            $table->increments('id')->unique();
+            $table->string('email_user_creator');
+            $table->string('contentApproached');
+            $table->dateTime('startTime');
+            $table->Time('duration');
+            $table->integer('id_location')->unsigned();
+            $table->foreign('id_location')->references('id')->on('locations');
+        });
+
+
+
     }
 
     /**
