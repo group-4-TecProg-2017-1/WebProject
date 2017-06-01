@@ -16,8 +16,8 @@ class UsersOnMonitoring extends Migration
         Schema::create('user_monitoring', function (Blueprint $table) {
             $table->integer('id_user')->unsigned();
             $table->integer('id_monitoring')->unsigned();
-            $table->foreign('id_user')->references('id')->on('users');
-            $table->foreign('id_monitoring')->references('id')->on('monitorings');
+            $table->foreign('id_user')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('id_monitoring')->references('id')->on('monitorings')->onDelete('cascade');
             $table->timestamps();
         });
     }

@@ -130,7 +130,10 @@ class MonitoringsController extends Controller
     public function destroy($id)
     {
       $monitoring = Monitoring::find($id);
+      
       $monitoring->delete();
+
+
 
       return redirect('monitorings')->with('status', 'Sucessfuly deleted Monitorings!');
     }
