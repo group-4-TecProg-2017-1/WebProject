@@ -7,10 +7,18 @@ use App\Monitoring;
 use App\Location;
 use App\User;
 use App\Course;
-use Log;
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
 
 class MonitoringsController extends Controller
 {
+    public $log;
+    public function __construct()
+    {
+        $this->log = new Logger('monitorings');
+        $this->log->pushHandler(new StreamHandler(__DIR__.'/monitorings.log', Logger::DEBUG));
+    }
+
     /**
      * Display a listing of monitorings.
      *
@@ -130,7 +138,7 @@ class MonitoringsController extends Controller
     public function destroy($id)
     {
       $monitoring = Monitoring::find($id);
-      
+
       $monitoring->delete();
 
 
