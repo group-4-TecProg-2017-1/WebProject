@@ -71,7 +71,6 @@ class MonitoringsController extends Controller
             $monitoring -> monitors() -> attach($monitor);
         }
 
-
         return redirect('/monitorings')->with('status', 'Successfuly created Monitoring!');
     }
 
@@ -133,4 +132,6 @@ class MonitoringsController extends Controller
 
       return redirect('monitorings')->with('status', 'Sucessfuly deleted Monitorings!');
     }
+
+
 }

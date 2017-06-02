@@ -114,3 +114,5 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index');
 Route::get('/study_group' , 'StudyGroupController@index');
+
+Route::get('/study_group/create' , 'StudyGroupController@create_study_group_page');

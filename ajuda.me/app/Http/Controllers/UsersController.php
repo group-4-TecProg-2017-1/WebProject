@@ -4,11 +4,18 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\User;
+use App\UserMonitoring;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
+use Illuminate\Support\Facades\Log;
 
 class UsersController extends Controller
 {   
+
+    CONST LOG_DESTROY = 'Method destroy on UsersController has been reached.';
+    CONST LOG_DESTROY_USER_MONITORING = "The method destroUserMonitoringById has been reached.";
+    CONST LOG_USER_MONITORING_DELETED = "The user_monitoring row has been deleted.";
+
     public $log;
     public function __construct()
     {
@@ -108,14 +115,34 @@ class UsersController extends Controller
      * Remove the specified user from storage.
      *
      * @param  int  $id
+     * @param \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function destroy(Request $request, $id)
     {
+
+        Log::info(self::LOG_DESTROY);
+
+        #self::destroy_user_monitoring_by_id($id);
+
+
         $user = User::find($id);
         $user->delete();
 
         return redirect('/users')->with('status', 'Sucessfuly deleted user!');
     }
+
+    /**
+    * Delete user_monitoring by id
+    * @param int $id
+    */
+    private function destroy_user_monitoring_by_id($id)
+    {
+        Log::info(self::LOG_DESTROY_USER_MONITORING);
+        $user_monitoring = UserMonitoring::find($id);
+        $user_monitoring->delete();
+        Log::info(self::LOG_USER_MONITORING_DELETED);
+    }
+
 
 }
