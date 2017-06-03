@@ -74,7 +74,9 @@
                 </div>
 
                 <div class="panel-body">
-                  <a href="/monitorings/create">Create new monitoring</a>
+                @if ($user != "student")
+                    <a href="/monitorings/create">Create new monitoring</a>
+                @endif
                 </div>
             </div>
         </div>
