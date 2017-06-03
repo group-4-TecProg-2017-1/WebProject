@@ -22,7 +22,11 @@
                             <th width="20%">Duration</th>
                             <th width="20%">Location</th>
                             <th width="20%"></th>
-                            <th width="20%" colspan="2">Actions</th>
+                            @if ($user != "student")
+                              <th width="20%" colspan="2">Actions</th>
+                            @else
+                            <!-- Nothing to do -->
+                            @endif
                             @foreach ($monitorings as $monitoring)
                                 <tr>
                                     <td>{{$monitoring->contentApproached}}</td>
@@ -42,12 +46,16 @@
                                             @endif
                                         @endforeach
                                     @endif
-                                    <td>
+                                    @if ($user != "student")
+                                      <td>
                                         <a href="/monitorings/{{$monitoring->id}}/edit" class="btn btn-warning" style="background-color:#00FF7F;color:white;">Update</a>
-                                    </td>
-                                    <td>
+                                      </td>
+                                      <td>
                                         <a href="/monitorings/{{$monitoring->id}}/delete" onclick="return confirm('Are you sure you want to delete the monitoring?')" class="btn btn-danger" style="background-color:#FF6347;color:white;">Delete</a>
-                                    </td>
+                                      </td>
+                                    @else
+                                      <!-- Nothing to do -->
+                                    @endif
                                 </tr>
                             @endforeach
                         </table>
