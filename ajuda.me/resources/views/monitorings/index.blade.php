@@ -64,6 +64,7 @@
                                     @else
                                       <!-- Nothing to do -->
                                     @endif
+                                      <td><a href="/monitorings/{{$monitoring->id}}/details">Details</a></td>
                                 </tr>
                             @endforeach
                         </table>
