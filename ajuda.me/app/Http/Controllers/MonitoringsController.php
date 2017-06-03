@@ -33,7 +33,27 @@ class MonitoringsController extends Controller
         $courses = Course::orderBy('id', 'asc')->get();
         $selectedCourse = User::first()->course_id;
         $user = Auth::user()->role;
+        $user_id = Auth::user()->id;
 
+
+        if($user == "student"){
+
+            foreach ($courses as $course){
+                foreach($monitorings as $key =>$monitoring){
+                                
+                    if ($course->id == $monitoring->id_courses){
+                        $user_within = $course->students()->where('id', $user_id)->first();
+
+                        if(!$user_within){
+                             unset($monitorings[$key]);
+                        }
+                    }
+                    
+                }    
+            }
+        }
+        
+     
         return view('monitorings.index', compact('monitorings', 'courses', 'locations', 'selectedCourse', 'user'));
     }
 
@@ -76,8 +96,8 @@ class MonitoringsController extends Controller
         $monitoring->duration = request('duration');
         $monitoring->id_location = request('location_id');
         $monitoring->id_courses = request('course_id');
-
         $monitoring->save();
+
 
         foreach (request('monitors') as $monitor) {
             $monitoring -> monitors() -> attach($monitor);
