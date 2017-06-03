@@ -8,7 +8,7 @@
                 <div class="panel-heading">Courses
                 </div>
                 <div>
-                    <form action="/courses/filter" method="POST"> 
+                    <form action="/courses/filter" method="POST">
                         {{ csrf_field() }}
                         <div class="col-md-3" >
                             <input class="form-control" type="text" maxlength="6" placeholder="ID" name="id" >
@@ -17,18 +17,18 @@
                             <input class="form-control" type="text" placeholder="Name" name="name">
                         </div>
                         <button type="submit" class="btn btn-primary">  search</button>
-                    </form> 
+                    </form>
                 </div>
 
                 <div class="panel-body">
                     <table align="left">
                         @if (count($courses) != 0)
                             @if ($user == "admin")
-                            <th> </th>
-                            <th></th>
+                              <th> </th>
+                              <th></th>
                             @endif
                             @if ($user == "student")
-                            <th></th>
+                                <th></th>
                             @endif
                             <th>ID</th>
                             <th>Name</th>
@@ -48,14 +48,18 @@
                                         Edit
                                     </a>
                                 </td>
-                                
+
                             @endif
-                            @if ($user == "student")
+                            @if ($user != "admin")
+                              @if ( ($course->students()->count()) == 0)
                                 <td>
                                     <a href="{{URL::to('/courses/subscribe/'.$course->id)}}" class="btn btn-info">
                                         Subscribe
                                     </a>
                                 </td>
+                                @else
+                                  <!-- User is already subscribed-->
+                                @endif
                             @endif
                                 <td width="10%">
                                     {{ $course->id }}
