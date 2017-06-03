@@ -26,8 +26,9 @@ class CoursesController extends Controller
 
         $courses = Course::orderBy('id', 'asc')->get();
         $user = Auth::user()->role;
+        $user_id = Auth::user()->id;
 
-        return view('courses.index', compact('courses', 'user'));
+        return view('courses.index', compact('courses', 'user', 'user_id'));
     }
 
 

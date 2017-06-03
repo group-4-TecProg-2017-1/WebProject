@@ -64,6 +64,7 @@
                                     @else
                                       <!-- Nothing to do -->
                                     @endif
+                                      <td><a href="/monitorings/{{$monitoring->id}}/details">Details</a></td>
                                 </tr>
                             @endforeach
                         </table>
@@ -74,7 +75,9 @@
                 </div>
 
                 <div class="panel-body">
-                  <a href="/monitorings/create">Create new monitoring</a>
+                @if ($user != "student")
+                    <a href="/monitorings/create">Create new monitoring</a>
+                @endif
                 </div>
             </div>
         </div>
