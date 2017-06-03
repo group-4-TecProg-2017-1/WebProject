@@ -23,8 +23,10 @@
                 <div class="panel-body">
                     <table align="left">
                         @if (count($courses) != 0)
+                            @if ($user == "admin")
                             <th> </th>
                             <th></th>
+                            @endif
                             <th>ID</th>
                             <th>Name</th>
                         @else
@@ -32,6 +34,7 @@
                         @endif
                         @foreach ($courses as $course)
                             <tr>
+                            @if ($user == "admin")
                                 <td width="10%" >
                                     <a href="{{URL::to('/course/'.$course->id) }}" class="btn btn-danger">
                                         Delete
@@ -42,12 +45,14 @@
                                         Edit
                                     </a>
                                 </td>
+                            @endif
                                 <td width="10%">
                                     {{ $course->id }}
                                 </td>
                                 <td width="50%">
                                     {{ $course->name }}
                                 </td>
+
                             </tr>
                         @endforeach
                     </table>

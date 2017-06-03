@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Course;
 use App\Monitoring;
 use App\Monitor;
+use App\User;
+use Illuminate\Support\Facades\Auth;
 
 class CoursesController extends Controller
 {
@@ -23,8 +25,9 @@ class CoursesController extends Controller
         Log::info(LOG_MESSAGE);
 
         $courses = Course::orderBy('id', 'asc')->get();
+        $user = Auth::user()->role;
         
-        return view('courses.index', compact('courses'));
+        return view('courses.index', compact('courses', 'user'));
     }
 
 
