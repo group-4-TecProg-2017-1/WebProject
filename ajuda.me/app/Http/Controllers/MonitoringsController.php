@@ -9,6 +9,8 @@ use App\User;
 use App\Course;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
+use Log;
+use Illuminate\Support\Facades\Auth;
 
 class MonitoringsController extends Controller
 {
@@ -30,8 +32,9 @@ class MonitoringsController extends Controller
         $locations = Location::orderBy('id', 'asc')->get();
         $courses = Course::orderBy('id', 'asc')->get();
         $selectedCourse = User::first()->course_id;
+        $user = Auth::user()->role;
 
-        return view('monitorings.index', compact('monitorings', 'courses', 'locations', 'selectedCourse'));
+        return view('monitorings.index', compact('monitorings', 'courses', 'locations', 'selectedCourse', 'user'));
     }
 
     /**
