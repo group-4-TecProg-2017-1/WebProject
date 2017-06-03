@@ -27,6 +27,9 @@
                             <th> </th>
                             <th></th>
                             @endif
+                            @if ($user == "student")
+                            <th></th>
+                            @endif
                             <th>ID</th>
                             <th>Name</th>
                         @else
@@ -43,6 +46,14 @@
                                 <td>
                                     <a href="{{URL::to('/courses/edit/'.$course->id)}}" class="btn btn-info">
                                         Edit
+                                    </a>
+                                </td>
+                                
+                            @endif
+                            @if ($user == "student")
+                                <td>
+                                    <a href="{{URL::to('/courses/subscribe/'.$course->id)}}" class="btn btn-info">
+                                        Subscribe
                                     </a>
                                 </td>
                             @endif
