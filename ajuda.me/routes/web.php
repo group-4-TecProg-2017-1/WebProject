@@ -54,6 +54,9 @@ Route::get('/monitorings/{id}/edit', 'MonitoringsController@edit')
 Route::put('/monitorings/{id}', 'MonitoringsController@update')
     ->middleware('auth');
 
+Route::get('/monitorings/{id}/details', 'MonitoringsController@details')
+    ->middleware('auth');
+
 Route::get('/courses', 'CoursesController@index')
     ->middleware('auth');
 
