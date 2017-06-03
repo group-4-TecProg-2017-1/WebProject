@@ -75,6 +75,8 @@ Route::get('/courses/edit/{course_id}','CoursesController@editCourse');
 
 Route::get('/courses/subscribe/{course_id}','CoursesController@subscribe');
 
+Route::get('/courses/unsubscribe/{course_id}','CoursesController@unsubscribe');
+
 Route::post('/courses/edit', 'CoursesController@validateIfCourseCanBeUpdated');
 
 Route::post('/courses/filter', 'CoursesController@filter');
