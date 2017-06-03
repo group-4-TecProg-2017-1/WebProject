@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Location;
+use Illuminate\Support\Facades\Auth;
 
 class LocationsController extends Controller
 {
@@ -15,8 +16,9 @@ class LocationsController extends Controller
     public function index()
     {
         $locations = Location::orderBy('id', 'asc')->get();
+        $user = Auth::user()->role;
 
-        return view('locations.index', compact('locations'));
+        return view('locations.index', compact('locations', 'user'));
     }
 
     /**
