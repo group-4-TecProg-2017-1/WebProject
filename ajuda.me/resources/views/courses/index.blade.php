@@ -51,7 +51,7 @@
 
                             @endif
                             @if ($user != "admin")
-                              @if ( ($course->students()->count()) == 0)
+                              @if ( !($course->students()->where('id', $user_id)->first()))
                                 <td>
                                     <a href="{{URL::to('/courses/subscribe/'.$course->id)}}" class="btn btn-info">
                                         Subscribe
