@@ -58,9 +58,14 @@
                                     </a>
                                 </td>
                                 @else
-                                  <!-- User is already subscribed-->
+                                <td>
+                                    <a href="{{URL::to('/courses/unsubscribe/'.$course->id)}}" class="btn btn-danger">
+                                        Unsubscribe
+                                    </a>
+                                </td>
                                 @endif
                             @endif
+
                                 <td width="10%">
                                     {{ $course->id }}
                                 </td>
