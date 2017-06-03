@@ -19,18 +19,27 @@
                             <th width="20%">Room</th>
                             <th width="40%">Building</th>
                             <th width="20%">Description</th>
-                            <th width="20%" colspan="2">Actions</th>
+                            @if ($user == "admin")
+                              <th width="20%" colspan="2">Actions</th>
+                            @else
+                              <!-- Nothing to do -->
+                            @endif
                             @foreach ($locations as $location)
                                 <tr>
                                     <td>{{$location->room}}</td>
                                     <td>{{$location->building}}</td>
                                     <td>{{$location->description}}</td>
+
+                                    @if ($user == "admin")
                                     <td>
                                         <a href="/locations/{{$location->id}}/edit" class="btn btn-warning" style="background-color:#00FF7F;color:white;">Update</a>
                                     </td>
                                     <td>
                                         <a href="/locations/{{$location->id}}/delete" onclick="return confirm('Are you sure you want to delete the location?')" class="btn btn-danger" style="background-color:#FF6347;color:white;">Delete</a>
                                     </td>
+                                    @else
+                                      <!-- Nothing to do -->
+                                    @endif
                                 </tr>
                             @endforeach
                         </table>
