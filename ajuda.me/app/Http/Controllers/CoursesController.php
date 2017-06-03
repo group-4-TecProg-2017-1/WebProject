@@ -192,6 +192,25 @@ class CoursesController extends Controller
         return redirect(PAGE_TO_REDIRECT)->with('status', 'Subscribed!');;
     }
 
+    public function unsubscribe($course_id){
+      define('PAGE_TO_REDIRECT' , "/courses");
+      define("FOUND_COURSE" , "Course has been found");
+      define("COURSE_NOT_FOUND" , "Course has not been found");
+
+      $course= self::searchCourse($course_id);
+      $foundCourse = Course::find($course_id)->get();
+      $user = Auth::user()->id;
+      if ($foundCourse != null){
+          Log:info(FOUND_COURSE);
+          $course -> students() -> detach($user);
+
+      }else{
+          Log::warning(COURSE_NOT_FOUND);
+      }
+
+      return redirect(PAGE_TO_REDIRECT)->with('status', 'You Canceled your subscription');;
+    }
+
     public function searchCourse($course_id)
     {
         $course = null;
