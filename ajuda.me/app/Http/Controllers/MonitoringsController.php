@@ -40,7 +40,7 @@ class MonitoringsController extends Controller
 
             foreach ($courses as $course){
                 foreach($monitorings as $key =>$monitoring){
-                                
+
                     if ($course->id == $monitoring->id_courses){
                         $user_within = $course->students()->where('id', $user_id)->first();
 
@@ -48,12 +48,14 @@ class MonitoringsController extends Controller
                              unset($monitorings[$key]);
                         }
                     }
-                    
-                }    
+                    else {
+                      //Nothing to do (Course is not related to the monitoring)
+                    }
+                }
             }
         }
-        
-     
+
+
         return view('monitorings.index', compact('monitorings', 'courses', 'locations', 'selectedCourse', 'user'));
     }
 
@@ -127,6 +129,23 @@ class MonitoringsController extends Controller
       $monitoring = Monitoring::find($id);
 
         return view('monitorings.edit', compact('monitoring', 'locations', 'selectedLocation','courses',
+            'selectedCourse','monitors','selectedMonitors'));
+    }
+
+    public function details($id)
+    {
+      $locations = Location::orderBy('id', 'asc')->get();
+      $selectedLocation = User::first()->location_id;
+
+      $courses = Course::orderBy('id', 'asc')->get();
+      $selectedCourse = User::first()->course_id;
+
+      $monitors = User::where('role', 'monitor')->get();
+      $selectedMonitors = User::first()->user_id;
+
+      $monitoring = Monitoring::find($id);
+
+        return view('monitorings.details', compact('monitoring', 'locations', 'selectedLocation','courses',
             'selectedCourse','monitors','selectedMonitors'));
     }
 
