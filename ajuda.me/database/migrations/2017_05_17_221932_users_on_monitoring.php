@@ -13,7 +13,7 @@ class UsersOnMonitoring extends Migration
      */
     public function up()
     {
-        Schema::create('user_monitoring', function (Blueprint $table) {
+        Schema::create('user_monitorings', function (Blueprint $table) {
             $table->integer('id_user')->unsigned();
             $table->integer('id_monitoring')->unsigned();
             $table->foreign('id_user')->references('id')->on('users');

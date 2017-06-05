@@ -50,6 +50,7 @@ class StudyGroupController extends Controller
                                   , 'monitors' , 'selectedMonitors'));
         }else{
             Log::info(self::LOG_ELSE_CREATE_STUDY_GROUP_PAGE);
+            $page_to_redirect = view('study_group.index');
         }
 
         return $page_to_redirect;
