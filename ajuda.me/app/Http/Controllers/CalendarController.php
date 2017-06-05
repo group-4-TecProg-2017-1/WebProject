@@ -4,6 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Monitoring;
+use App\Course;
+use App\User;
+
 
 class CalendarController extends Controller
 {
@@ -14,8 +18,30 @@ class CalendarController extends Controller
      */
     public function index()
     {
+        $monitorings = Monitoring::orderBy('id', 'asc')->get();
+        $user_id = Auth::user()->id;
+        $courses = Course::orderBy('id', 'asc')->get();
 
-        return view('calendar.index');
+
+        foreach ($courses as $course){
+            foreach($monitorings as $key =>$monitoring){
+
+                if ($course->id == $monitoring->id_courses){
+                    $user_within = $course->students()->where('id', $user_id)->first();
+
+                    if(!$user_within){
+                         unset($monitorings[$key]);
+                    }
+                }
+                else {
+                  //Nothing to do (Course is not related to the monitoring)
+                }
+            }
+        }
+        
+
+
+        return view('calendar.index',  compact('monitorings'));
     }
 
     /**
