@@ -51,6 +51,9 @@ Route::get('/monitorings/{id}/edit', 'MonitoringsController@edit')
 Route::put('/monitorings/{id}', 'MonitoringsController@update')
     ->middleware('auth');
 
+Route::get('/monitorings/{id}/details', 'MonitoringsController@details')
+    ->middleware('auth');
+
 Route::get('/courses', 'CoursesController@index')
     ->middleware('auth');
 
@@ -69,6 +72,10 @@ Route::get('/courses/{course_id}/edit', 'CoursesController@edit')
 Route::get('/course/{course_id}','CoursesController@delete');
 
 Route::get('/courses/edit/{course_id}','CoursesController@editCourse');
+
+Route::get('/courses/subscribe/{course_id}','CoursesController@subscribe');
+
+Route::get('/courses/unsubscribe/{course_id}','CoursesController@unsubscribe');
 
 Route::post('/courses/edit', 'CoursesController@validateIfCourseCanBeUpdated');
 

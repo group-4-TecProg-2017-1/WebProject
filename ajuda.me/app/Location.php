@@ -1,4 +1,12 @@
 <?php
+
+/**
+* Class Location
+*
+* This Class is responsible to answer the data requests from the locations
+* view by retrieving the information from the MySQL database.
+*
+*/
 namespace App;
 
 class Location extends Model

@@ -1,4 +1,14 @@
 <?php
+
+/**
+* Class Monitoring
+*
+* This Class is responsible to answer the data requests from the monitorings
+* view by retrieving the monitoring information from the MySQL database and
+* retrieving the related data from the locations and courses classes.
+*
+*/
+
 namespace App;
 
 class Monitoring extends Model
@@ -9,7 +19,6 @@ class Monitoring extends Model
     private $startTime;
     private $duration;
     private $id_location;
-    private $id_courses;
 
 
     public function setMonitoringID($monitoring_id)
@@ -60,18 +69,15 @@ class Monitoring extends Model
     {
       return $this->id_location;
     }
-    public function setIdCourses($id_courses)
+
+    public function course()
     {
-      $this->id_location = $id_location;
-    }
-    public function getIdCourses($id_courses)
-    {
-      return $this->id_courses;
+       return $this->hasMany('App\Course', 'id','courses_id');
     }
 
     public function monitors()
     {
-      return $this->belongsToMany('App\User', 'user_monitoring', 
+      return $this->belongsToMany('App\User', 'user_monitoring',
       'id_monitoring' ,'id_user')
       -> withTimestamps();
     }

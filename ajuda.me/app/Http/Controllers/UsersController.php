@@ -9,13 +9,22 @@ use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
 use Illuminate\Support\Facades\Log;
 
+/**
+ * This class receives requests from views, retrieves requested information
+ * from database and redirect to views.
+ *
+ */
 class UsersController extends Controller
+<<<<<<< HEAD
 {   
 
     CONST LOG_DESTROY = 'Method destroy on UsersController has been reached.';
     CONST LOG_DESTROY_USER_MONITORING = "The method destroUserMonitoringById has been reached.";
     CONST LOG_USER_MONITORING_DELETED = "The user_monitoring row has been deleted.";
 
+=======
+{
+>>>>>>> 09584b2f88bc2f08c9c920f346e1a4c401a4d375
     public $log;
     public function __construct()
     {
@@ -131,6 +140,7 @@ class UsersController extends Controller
 
         return redirect('/users')->with('status', 'Sucessfuly deleted user!');
     }
+<<<<<<< HEAD
 
     /**
     * Delete user_monitoring by id
@@ -145,4 +155,6 @@ class UsersController extends Controller
     }
 
 
+=======
+>>>>>>> 09584b2f88bc2f08c9c920f346e1a4c401a4d375
 }

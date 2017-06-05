@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class UsersOnMonitoring extends Migration
+class UsersOnCourse extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,11 @@ class UsersOnMonitoring extends Migration
      */
     public function up()
     {
-        Schema::create('user_monitorings', function (Blueprint $table) {
+        Schema::create('user_course', function (Blueprint $table) {
             $table->integer('id_user')->unsigned();
-            $table->integer('id_monitoring')->unsigned();
+            $table->integer('course_id')->unsigned();
             $table->foreign('id_user')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('id_monitoring')->references('id')->on('monitorings')->onDelete('cascade');
+            $table->foreign('course_id')->references('id')->on('courses')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -29,6 +29,6 @@ class UsersOnMonitoring extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_monitoring');
+        Schema::dropIfExists('user_course');
     }
 }
