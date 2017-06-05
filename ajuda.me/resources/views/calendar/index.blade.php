@@ -123,17 +123,23 @@
             
             events: [
                 @foreach ($monitorings as $monitoring)
-                {
-                    title: '<?php echo $monitoring->contentApproached;?>',
-                    start: new Date(y, m, d-3, 16, 0),
-                    allDay: false
-                },
+                    
+                    {
+                        id: '<?php echo $monitoring->id;?>',
+                        title: '<?php echo $monitoring->contentApproached;?>',
+                        start: '<?php echo $monitoring->startTime;?>',
+                        allDay: false,
+                        end: '<?php echo date('Y-m-d H:i:s', (strtotime($monitoring->startTime) + strtotime($monitoring->duration, 0)));?>',
+                        url: '<?php echo ('./monitorings/'.$monitoring->id.'/details')?>'
+
+                    },
                 @endforeach
                 
             ],          
         });
         
-        console.log(calendar);
+        //console.log('<?php echo date('Y-m-d H:i:s', (strtotime($monitoring->startTime) + strtotime($monitoring->duration, 0)));?>');
+        //console.log('<?php echo $monitoring->duration;?>');
     });
 
     </script>
