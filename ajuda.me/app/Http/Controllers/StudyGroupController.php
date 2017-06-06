@@ -39,18 +39,18 @@ class StudyGroupController extends Controller
         Log::info(self::LOG_FUNCTION_CREATE_PAGE);
 
         $locations = Location::orderBy('id', 'asc')->get();
+        $study_groups = StudyGroup::orderBy('id' , 'asc')->get();
 
         if (count($locations) != 0){
             
             $selectedLocation = User::first()->location_id;
             $monitors = User::where('role', 'monitor')->get();
             $selectedMonitors = User::first()->user_id;
-            $study_groups = StudyGroup::orderBy('id' , 'asc')->get();
             $page_to_redirect = view('study_group.create' , compact('locations' , 'selectedLocation'  
                                   , 'monitors' , 'selectedMonitors'));
         }else{
             Log::info(self::LOG_ELSE_CREATE_STUDY_GROUP_PAGE);
-            $page_to_redirect = view('study_group.index');
+            $page_to_redirect = view('study_group.index' , compact('study_groups'));
         }
 
         return $page_to_redirect;
