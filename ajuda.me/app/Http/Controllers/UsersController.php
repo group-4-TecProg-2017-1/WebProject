@@ -15,17 +15,17 @@ use Illuminate\Support\Facades\Log;
  *
  */
 class UsersController extends Controller
-<<<<<<< HEAD
 {   
 
     CONST LOG_DESTROY = 'Method destroy on UsersController has been reached.';
     CONST LOG_DESTROY_USER_MONITORING = "The method destroUserMonitoringById has been reached.";
     CONST LOG_USER_MONITORING_DELETED = "The user_monitoring row has been deleted.";
+    CONST LOG_REACHED_EDIT_METHOD = "The method edit on UserController has been reached";
+    CONST LOG_CREATE_METHOD_REACHED = "the method create on UserController has been reached";
 
-=======
-{
->>>>>>> 09584b2f88bc2f08c9c920f346e1a4c401a4d375
+
     public $log;
+
     public function __construct()
     {
         $this->log = new Logger('my_app');
@@ -51,7 +51,8 @@ class UsersController extends Controller
      */
     public function create()
     {
-        return view('users.create');
+        Log::info(self::LOG_CREATE_METHOD_REACHED);
+        return view('users.index');
     }
 
     /**
@@ -97,6 +98,7 @@ class UsersController extends Controller
      */
     public function edit($id)
     {
+        Log::info(self::LOG_REACHED_EDIT_METHOD);
         $user = User::find($id);
 
         return view('users.edit', compact('user'));
@@ -140,7 +142,7 @@ class UsersController extends Controller
 
         return redirect('/users')->with('status', 'Sucessfuly deleted user!');
     }
-<<<<<<< HEAD
+
 
     /**
     * Delete user_monitoring by id
@@ -154,7 +156,4 @@ class UsersController extends Controller
         Log::info(self::LOG_USER_MONITORING_DELETED);
     }
 
-
-=======
->>>>>>> 09584b2f88bc2f08c9c920f346e1a4c401a4d375
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Http\Request;
 use App\Location;
 use App\StudyGroup;
 use App\User;
@@ -13,7 +14,8 @@ class StudyGroupController extends Controller
     CONST LOG_MESSAGE = 'Study group view reached (index).';
     CONST LOG_FUNCTION_CREATE_PAGE = 'Function to redirect to study group create page has been reached';
     CONST LOG_ELSE_CREATE_STUDY_GROUP_PAGE = 'Else condition of create study group page.';
-      
+    CONST LOG_CREATED_STUDY_GROUP = 'The study group has been created succesfully';
+    CONST LOG_USER_NOT_CREATED) = 'The study group HAS NOT been created');
    
 	/**
     * Display a listing study groups.
@@ -55,6 +57,47 @@ class StudyGroupController extends Controller
 
         return $page_to_redirect;
     }
+
+    /**
+    * Creates StudyGroup object 
+    * @return StudyGroup $study_group
+    */
+    private function createStudyGroup(){
+        $study_group = null;
+        $study_group = new StudyGroup();
+
+        if($study_group != null){
+            Log::info(self::LOG_CREATED_STUDY_GROUP);
+        }else{
+            Log::info(self::LOG_USER_NOT_CREATED);
+        }
+
+        return $study_group;
+    }
+
+
+    /**
+    * Validates inputed data of study group to verify if is possible to create
+    * @param \Illuminate\Http\Request  $request
+    * @return \Illuminate\Http\Request 
+    */
+    public function validatesStudyGroupData(Request $request){
+
+        $study_group = self::createStudyGroup();
+
+        if($study_group != null){ 
+            /*
+            $this->validate($request, [
+                    'name' => 'required|max:255',
+                    'email' => 'required|email|max:255|unique:users',
+                    'role' => 'in:admin,monitor,student',
+            ]);
+            */
+        }else{
+           
+        }
+    }
+
 
 
 }

@@ -21,7 +21,7 @@
             <ul class="nav navbar-nav">
                 @if ($user = Auth::user())
                     
-                    <li><a href="/users">Users</a></li>
+                    <li><a href="/users/$user">Users</a></li>
                     <li><a href="/courses">Courses</a></li>
                     <li><a href="/locations">Locations</a></li>
                     <li><a href="/monitorings">Monitoring</a></li>
@@ -29,7 +29,7 @@
 
 
                 @else
-                <!-- Nothing to show -->
+                    <!-- Nothing to show -->
                 @endif
             </ul>
 

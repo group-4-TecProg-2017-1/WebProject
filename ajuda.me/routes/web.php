@@ -96,10 +96,10 @@ Route::get('/tags/create', 'SubjectController@create')
 Route::post('/tags', 'SubjectController@store')
     ->middleware('auth');
 
-Route::get('/users', 'UsersController@index')
+Route::get('/users/{User}', 'UsersController@index')
     ->middleware('auth');
 
-Route::get('/users/create/', 'UsersController@create')
+Route::get('/users/create/', 'CoursesController@index')
     ->middleware('auth');
 
 Route::post('/users', 'UsersController@store')
@@ -123,3 +123,5 @@ Route::get('/home', 'HomeController@index');
 Route::get('/study_group' , 'StudyGroupController@index');
 
 Route::get('/study_group/create' , 'StudyGroupController@create_study_group_page');
+
+Route::post('study_group/store' , 'StudyGroupController@validatesStudyGroupData');
