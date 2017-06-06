@@ -7,6 +7,7 @@ use App\Location;
 use App\StudyGroup;
 use App\User;
 use App\Course;
+use Illuminate\Support\Facades\Auth;
 
 class StudyGroupController extends Controller
 {
@@ -15,7 +16,7 @@ class StudyGroupController extends Controller
     CONST LOG_FUNCTION_CREATE_PAGE = 'Function to redirect to study group create page has been reached';
     CONST LOG_ELSE_CREATE_STUDY_GROUP_PAGE = 'Else condition of create study group page.';
     CONST LOG_CREATED_STUDY_GROUP = 'The study group has been created succesfully';
-    CONST LOG_USER_NOT_CREATED) = 'The study group HAS NOT been created');
+    CONST LOG_USER_NOT_CREATED = 'The study group HAS NOT been created';
    
 	/**
     * Display a listing study groups.
@@ -77,7 +78,7 @@ class StudyGroupController extends Controller
 
 
     /**
-    * Validates inputed data of study group to verify if is possible to create
+    * Validates inputed data of study group to verify if is possible to store on database
     * @param \Illuminate\Http\Request  $request
     * @return \Illuminate\Http\Request 
     */
@@ -86,16 +87,38 @@ class StudyGroupController extends Controller
         $study_group = self::createStudyGroup();
 
         if($study_group != null){ 
+
+            $study_group = self::completeAtributesOfStudyGroup($study_group , $request);
+            Log::info($study_group);
             /*
-            $this->validate($request, [
+            $this->validate($study_group, [
                     'name' => 'required|max:255',
                     'email' => 'required|email|max:255|unique:users',
                     'role' => 'in:admin,monitor,student',
             ]);
             */
         }else{
-           
+           # study group is null and cannot store on database
         }
+    }
+
+    /**
+    * Fill atributes of study group with request data
+    * @param \Illuminate\Http\Request $request
+    * @param StudyGroup $study_group
+    * @return StudyGroup $study_group
+    */
+    private function completeAtributesOfStudyGroup(StudyGroup $study_group , Request $request){
+
+        $user =  Auth::user();
+        $study_group->email_user_creator =$user->email;
+
+        $study_group->content_approached = request('fieldOfContentAproached');
+        $study_group->start_time = request('fieldOfStartTime');
+        $study_group->duration = request('fieldOfDuration');
+        $study_group->id_location = request('location_id');
+
+        return $study_group;
     }
 
 

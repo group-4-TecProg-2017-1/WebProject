@@ -14,18 +14,18 @@
 
                         <div class="form-group">
                             <label for="inputContentApproached">Content Approached:</label>
-                            <input type="text" name="contentApproached" class="form-control" id="inputName" placeholder="Enter the Monitoring's Content Approached">
+                            <input type="text" name="fieldOfContentAproached" class="form-control" id="inputName" placeholder="Enter the Monitoring's Content Approached">
                         </div>
 
 
                         <div class="form-group">
                             <label for="inputTime">Start Time</label>
-                            <input type="datetime-local" name="startTime" class="form-control" id="inputName">
+                            <input type="datetime-local" name="fieldOfStartTime" class="form-control" id="inputName">
                         </div>
 
                         <div class="form-group">
                             <label for="inputDuration">Duration</label>
-                            <input type="time" name="duration" class="form-control" id="inputName">
+                            <input type="time" name="fieldOfDuration" class="form-control" id="inputName">
                         </div>
 
                         <div class="form-group">

@@ -122,6 +122,6 @@ Auth::routes();
 Route::get('/home', 'HomeController@index');
 Route::get('/study_group' , 'StudyGroupController@index');
 
-Route::get('/study_group/create' , 'StudyGroupController@create_study_group_page');
+Route::get('/study_group/create' , 'StudyGroupController@create_study_group_page')->middleware('auth');
 
-Route::post('study_group/store' , 'StudyGroupController@validatesStudyGroupData');
+Route::post('study_group/store' , 'StudyGroupController@validatesStudyGroupData')->middleware('auth');
