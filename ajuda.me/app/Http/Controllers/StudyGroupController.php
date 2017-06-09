@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Auth;
 
 class StudyGroupController extends Controller
 {
+    CONST MAX_LENGHT_CONTENT_APPROACHED = 255;
+    CONST MIN_LENGHT_CONTENT_APPROACHED = 3;
 
     CONST LOG_MESSAGE = 'Study group view reached (index).';
     CONST LOG_FUNCTION_CREATE_PAGE = 'Function to redirect to study group create page has been reached';
@@ -84,25 +86,103 @@ class StudyGroupController extends Controller
     */
     public function validatesStudyGroupData(Request $request){
 
+        $study_group = null;
         $study_group = self::createStudyGroup();
 
         if($study_group != null){ 
 
+            $check_validation = self::validatesRequestedData($request);
+            
             $study_group = self::completeAtributesOfStudyGroup($study_group , $request);
             Log::info($study_group);
-            /*
-            $this->validate($study_group, [
-                    'name' => 'required|max:255',
-                    'email' => 'required|email|max:255|unique:users',
-                    'role' => 'in:admin,monitor,student',
-            ]);
-            */
+
         }else{
            # study group is null and cannot store on database
         }
     }
 
-    /**
+    /*
+    * validates request data to fill in study group object 
+    *   @param \Illuminate\Http\Request  $request
+    *   @return boolean check_validation  return true if all data are validated, else return false
+    */
+    private function validatesRequestedData(Request $request){
+
+        $content_aproached = request('fieldOfContentAproached');
+        $valid_content_aproached = self::validate_content_aproached($content_aproached);
+
+        if($valid_content_aproached){
+            Log::info("content_aproached is valid");
+        }else{
+             Log::info("content_aproached is NOT valid");
+        }
+
+    }
+
+    /*
+    * validate if content aproach is valid
+    * @param String content_aproached
+    * @return boolean validContent 
+    */
+    private function validate_content_aproached($content_aproached){
+
+        $is_null = true;
+        $is_null = self::validate_if_content_aproached_is_null($content_aproached);
+
+        $valid_length = false;
+        $valid_length = self::validate_lenght_of_content_aproached($content_aproached);
+
+        $content_aproached_is_validated = false;
+        if($is_null == false && $valid_length == true){
+            $content_aproached_is_validated = true;
+        }else{
+            $content_aproached_is_validated = false;
+        }
+
+        return $content_aproached_is_validated;
+    }
+
+    /*
+    * validate if content aproached is null
+    * @param $content_aproached
+    * @return boolean $is_null
+    */
+    private function validate_if_content_aproached_is_null($content_aproached){
+
+        $is_null = true;
+
+        if($content_aproached != null){
+            $is_null = false;
+        }else{
+            // nothing to do
+        }
+
+        return $is_null;
+    }
+
+
+    /*
+    * validate the min and max size of content approached
+    * @param string $content_aproached
+    * @return boolean valid_size
+    */
+    private function validate_lenght_of_content_aproached($content_aproached){
+
+        $valid_lenght = false;
+
+        $lenght_of_content_aproached = strlen($content_aproached);
+        if ($lenght_of_content_aproached < self::MAX_LENGHT_CONTENT_APPROACHED && 
+            $lenght_of_content_aproached >= self::MIN_LENGHT_CONTENT_APPROACHED ){
+            $valid_lenght = true;
+        }else{
+            // nothing to do
+        }
+
+        return $valid_lenght;
+    }
+
+
+    /*
     * Fill atributes of study group with request data
     * @param \Illuminate\Http\Request $request
     * @param StudyGroup $study_group
@@ -110,9 +190,13 @@ class StudyGroupController extends Controller
     */
     private function completeAtributesOfStudyGroup(StudyGroup $study_group , Request $request){
 
+        // get the current object User
         $user =  Auth::user();
+
+        //sets the email of user on study group
         $study_group->email_user_creator =$user->email;
 
+        // get inputed informations to fill in study group object
         $study_group->content_approached = request('fieldOfContentAproached');
         $study_group->start_time = request('fieldOfStartTime');
         $study_group->duration = request('fieldOfDuration');
