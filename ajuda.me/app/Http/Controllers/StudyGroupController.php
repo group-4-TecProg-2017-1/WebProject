@@ -13,6 +13,9 @@ class StudyGroupController extends Controller
 {
     CONST MAX_LENGHT_CONTENT_APPROACHED = 255;
     CONST MIN_LENGHT_CONTENT_APPROACHED = 3;
+    CONST LENGTH_DURATION_TIME_STRING = 5;
+    CONST LOWER_ACEPTED_HOUR = 00;
+    CONST HIGHER_ACEPTED_HOUR = 23;
 
     CONST LOG_MESSAGE = 'Study group view reached (index).';
     CONST LOG_FUNCTION_CREATE_PAGE = 'Function to redirect to study group create page has been reached';
@@ -111,18 +114,88 @@ class StudyGroupController extends Controller
         $content_aproached = request('fieldOfContentAproached');
         $valid_content_aproached = self::validate_content_aproached($content_aproached);
 
-        if($valid_content_aproached){
-            Log::info("content_aproached is valid");
+        $duration = request('fieldOfDuration');
+        $valid_duration = self::validate_duration($duration);
+
+        if($valid_content_aproached && $valid_duration){
+            Log::info("duration is valid");
         }else{
-             Log::info("content_aproached is NOT valid");
+             Log::info("duration is not valid");
         }
 
     }
 
     /*
+    * check if duration is validated with all required conditions
+    * @param string duration
+    * @return boolean valid_duration
+    */
+    private function validate_duration($duration){
+        $lenght_validated = false;
+        $lenght_validated = self::validate_lenght_of_duration($duration);
+
+        $limit_hours_validated = self::validate_limit_of_hours($duration);
+
+        if($duration != null && $lenght_validated){
+            Log::info("duration is all validated");
+        }else{
+            Log::info("duration has not been validated");
+        }
+
+
+    }
+
+
+    /* validate hour of a duration is in the limits of the day (> 0 && < 23)
+    * @param $duration
+    * @return $valid_limits_hour
+    */
+    private function validate_limit_of_hours($duration){
+
+        assert($duration != null);
+
+        try{
+            $hour_int = (int) $duration;
+        }catch(CastException $ex){
+            ex.getTraceAsString();
+        }
+
+        Log::info($hour_int);
+
+        $valid_limits_hour = false;
+        if($hour_int >= self::LOWER_ACEPTED_HOUR && $hour_int <= self::HIGHER_ACEPTED_HOUR){
+            $valid_limits_hour = true;
+        }else{
+            //nothing to do
+        }
+
+        return $valid_limits_hour;
+    }
+
+   
+    /* 
+    * validate lenght of duration of a study group
+    * @param string $duration
+    * @return boolean valid_length
+    */
+    private function validate_lenght_of_duration($duration){
+        $valid_length = false;
+
+        if(strlen($duration) == self::LENGTH_DURATION_TIME_STRING){
+            $valid_length = true;
+        }else{
+            //nothing to do 
+        }
+
+        return $valid_length;
+    }
+
+
+
+    /*
     * validate if content aproach is valid
-    * @param String content_aproached
-    * @return boolean validContent 
+    * @param string content_aproached
+    * @return boolean $content_aproached_is_validated
     */
     private function validate_content_aproached($content_aproached){
 
@@ -135,8 +208,10 @@ class StudyGroupController extends Controller
         $content_aproached_is_validated = false;
         if($is_null == false && $valid_length == true){
             $content_aproached_is_validated = true;
+            Log::info("content_aproached is valid");
         }else{
             $content_aproached_is_validated = false;
+            Log::info("content_aproached is NOT valid");
         }
 
         return $content_aproached_is_validated;
@@ -164,7 +239,7 @@ class StudyGroupController extends Controller
     /*
     * validate the min and max size of content approached
     * @param string $content_aproached
-    * @return boolean valid_size
+    * @return boolean $valid_lenght
     */
     private function validate_lenght_of_content_aproached($content_aproached){
 
