@@ -81,21 +81,7 @@
             },
             allDaySlot: false,
             selectHelper: true,
-            select: function(start, end, allDay) {
-                var title = prompt('Event Title:');
-                if (title) {
-                    calendar.fullCalendar('renderEvent',
-                        {
-                            title: title,
-                            start: start,
-                            end: end,
-                            allDay: allDay
-                        },
-                        true // make the event "stick"
-                    );
-                }
-                calendar.fullCalendar('unselect');
-            },
+            
             droppable: true, // this allows things to be dropped onto the calendar !!!
             drop: function(date, allDay) { // this function is called when something is dropped
 
