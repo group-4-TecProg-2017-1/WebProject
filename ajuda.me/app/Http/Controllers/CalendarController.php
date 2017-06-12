@@ -24,7 +24,8 @@ class CalendarController extends Controller
 
 
         foreach ($courses as $course){
-            foreach($monitorings as $key =>$monitoring){
+          if ($monitorings){
+              foreach($monitorings as $key =>$monitoring){
 
                 if ($course->id == $monitoring->id_courses){
                     $user_within = $course->students()->where('id', $user_id)->first();
@@ -36,13 +37,13 @@ class CalendarController extends Controller
                 else {
                   //Nothing to do (Course is not related to the monitoring)
                 }
-            }
+              }
+          }
         }
-        
 
-
-        return view('calendar.index',  compact('monitorings'));
+        return view('calendar.index',  compact('monitorings', 'monitoring'));
     }
+
 
     /**
      * Show the form for creating a new monitor.
