@@ -35,7 +35,7 @@
                                         <a href="/locations/{{$location->id}}/edit" class="btn btn-warning" style="background-color:#00FF7F;color:white;">Update</a>
                                     </td>
                                     <td>
-                                        <a href="/locations/{{$location->id}}/delete" onclick="return confirm('Are you sure you want to delete the location?')" class="btn btn-danger" style="background-color:#FF6347;color:white;">Delete</a>
+                                        <a href="/locations/{{$location->id}}/delete" onclick="return confirm('Are you sure you want to delete the location AND all the related study groups?')" class="btn btn-danger" style="background-color:#FF6347;color:white;">Delete</a>
                                     </td>
                                     @else
                                       <!-- Nothing to do -->

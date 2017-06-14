@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Location;
 use Illuminate\Support\Facades\Auth;
+use App\StudyGroup;
+use Illuminate\Support\Facades\Log;
 
 class LocationsController extends Controller
 {
@@ -88,7 +90,27 @@ class LocationsController extends Controller
     public function destroy($id)
     {
         $location = Location::find($id);
+
+        self::delete_all_related_study_groups($id);
         $location->delete();
         return redirect('/locations')->with('status', 'Sucessfuly deleted locations!');
+    }
+
+    /*
+    *   Delete all the study groups related to an location
+    *   @param int $id_location
+    *   @return void
+    */
+    private function delete_all_related_study_groups($id_location){
+        Log::info('on delete related StudyGroup with location');
+        $study_groups = StudyGroup::where('id_location', $id_location)->get();
+
+        Log::info('number os study groups');
+        Log:info(count($study_groups));
+        foreach ($study_groups as $study_group) {
+            $study_group->delete();
+        }
+        Log::info('number os study groups');
+        Log::info(count($study_groups));
     }
 }
