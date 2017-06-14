@@ -40,6 +40,7 @@ class Monitoring extends Migration
             $table->Time('duration');
             $table->integer('id_location')->unsigned();
             $table->foreign('id_location')->references('id')->on('locations');
+            $table->timestamps();
         });
 
 

@@ -17,14 +17,11 @@ class StudyGroupController extends Controller
     CONST LENGTH_DURATION_TIME_STRING = 5;
     CONST LOWER_ACEPTED_HOUR = 00;
     CONST HIGHER_ACEPTED_HOUR = 23;
-    CONST FIRST_INDEX = 0;
-    CONST SECOND_INDEX = 1;
-    CONST THIRD_INDEX = 2;
-    CONST FOURTH_INDEX = 3;
-    CONST SIXTH_INDEX = 5;
-    CONST SEVENTH_INDEX = 6;
-    CONST NINTH_INDEX = 8;
-    CONST TENTH_INDEX = 9;
+    CONST EMAIL_DATABASE_ATRIBUTE = 'email_user_creator';
+    CONST CONTENT_APPROACHED_DATABASE_ATRIBUTE = 'contentApproached';
+    CONST START_TIME_DATABASE_ATRIBUTE = 'startTime';
+    CONST DURATION_DATABASE_ATRIBUTE = 'duration';
+    CONST ID_LOCATION_DATABASE_ATRIBUTE = 'id_location';
 
 
 
@@ -144,6 +141,7 @@ class StudyGroupController extends Controller
         }else{
             Log::info(self::LOG_ELSE_CREATE_STUDY_GROUP_PAGE);
             $page_to_redirect = view('study_group.index' , compact('study_groups'));
+            
         }
 
         return $page_to_redirect;
@@ -176,17 +174,36 @@ class StudyGroupController extends Controller
 
         $study_group = null;
         $study_group = self::createStudyGroup();
+        $page_to_redirect = null;
 
         if($study_group != null){ 
 
-            $check_validation = self::validatesRequestedData($request);
+            #$check_validation = self::validatesRequestedData($request);
             
             $study_group = self::completeAtributesOfStudyGroup($study_group , $request);
-            Log::info($study_group);
+            self::store_study_group($study_group);
 
+            $page_to_redirect = redirect('/study_group');
         }else{
            # study group is null and cannot store on database
         }
+        return $page_to_redirect;
+    }
+
+    /*
+    * Store object study_group on database
+    *   @param $study_group
+    *   @return void
+    */
+    private function store_study_group($study_group){
+        Log::info('its inside the method store study group on database');
+        StudyGroup::create([self::EMAIL_DATABASE_ATRIBUTE => $study_group->email_user_creator, 
+                            self::CONTENT_APPROACHED_DATABASE_ATRIBUTE => $study_group->content_approached, 
+                            self::START_TIME_DATABASE_ATRIBUTE => $study_group->startTime , 
+                            self::DURATION_DATABASE_ATRIBUTE =>$study_group->duration , 
+                            self::ID_LOCATION_DATABASE_ATRIBUTE => $study_group->id_location ]);
+
+        Log::info('study_group has been stored on database');
     }
 
     /*
@@ -356,11 +373,17 @@ class StudyGroupController extends Controller
         //sets the email of user on study group
         $study_group->email_user_creator =$user->email;
 
-        // get inputed informations to fill in study group object
-        $study_group->content_approached = request('fieldOfContentAproached');
-        $study_group->start_time = request('fieldOfStartTime');
-        $study_group->duration = request('fieldOfDuration');
-        $study_group->id_location = request('location_id');
+        // get inputed informations
+        $content_aproached_inputed = request('fieldOfContentAproached');
+        $start_time_inputed = request('fieldOfStartTime');
+        $duration_inputed = request('fieldOfDuration');
+        $id_location_inputed = request('location_id');
+
+        // fill study group object
+        $study_group->content_approached = $content_aproached_inputed;
+        $study_group->startTime = $start_time_inputed;
+        $study_group->duration = $duration_inputed;
+        $study_group->id_location = $id_location_inputed;
 
         return $study_group;
     }

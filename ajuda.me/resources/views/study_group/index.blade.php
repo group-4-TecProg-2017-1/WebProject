@@ -41,10 +41,7 @@
                     <a href="/study_group/create" class="btn btn-success" >
                         Create study group
                     </a>
-                </div>
-                   
-                
-               
+                </div>           
             </div>
         </div>
     </div>
