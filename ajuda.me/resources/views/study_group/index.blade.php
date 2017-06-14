@@ -15,18 +15,22 @@
                     <table>
                     	<tr>
 	                    	<th width="30%">Creator's email:</th> 
-	                        <th width="30%">Content Approached</th> 
+	                        <th width="28%">Content Approached</th> 
 	                        <th width="20%">Start Time</th>
-	                        <th width="20%">Duration</th>
+	                        <th width="17%">Duration</th>
 	                        <th width="20%">Location</th>
                         </tr>
                         @foreach($study_groups as $study_group)
 							<tr>
-								<td>study_group</td>
-								<td>conteudo abordado</td>
-								<td>hora de início</td>
-								<td>duração</td>
-								<td>location</td>
+								<td>{{$study_group->email_user_creator}}</td>
+								<td>{{$study_group->contentApproached}}</td>
+								<td>{{$study_group->startTime}}</td>
+								<td>{{$study_group->duration}}</td>
+								<td> 
+                                    {{$buildings[$study_group->id_location]}}
+                                    {{$rooms[$study_group->id_location]}}
+                                    
+                                </td>
 							</tr>
 						@endforeach
                     </table>

@@ -8,6 +8,7 @@ use App\StudyGroup;
 use App\User;
 use App\Course;
 use Illuminate\Support\Facades\Auth;
+use \Datetime;
 
 class StudyGroupController extends Controller
 {
@@ -16,6 +17,16 @@ class StudyGroupController extends Controller
     CONST LENGTH_DURATION_TIME_STRING = 5;
     CONST LOWER_ACEPTED_HOUR = 00;
     CONST HIGHER_ACEPTED_HOUR = 23;
+    CONST FIRST_INDEX = 0;
+    CONST SECOND_INDEX = 1;
+    CONST THIRD_INDEX = 2;
+    CONST FOURTH_INDEX = 3;
+    CONST SIXTH_INDEX = 5;
+    CONST SEVENTH_INDEX = 6;
+    CONST NINTH_INDEX = 8;
+    CONST TENTH_INDEX = 9;
+
+
 
     CONST LOG_MESSAGE = 'Study group view reached (index).';
     CONST LOG_FUNCTION_CREATE_PAGE = 'Function to redirect to study group create page has been reached';
@@ -31,11 +42,85 @@ class StudyGroupController extends Controller
     public function index()
     {
         Log::info(self::LOG_MESSAGE);
-        $locations = null;
-        $locations = Location::orderBy('id', 'asc')->get();
+
+        // get the necessary informations to show on study groups index page (locations and study groups)
+        $rooms = self::get_idLocation_room();
+        $buildings = self::get_idLocation_building();
+
         $study_groups = StudyGroup::orderBy('id' , 'asc')->get();
-                
-        return view('study_group.index', compact('locations' , 'study_groups'));
+        self::correct_time_format($study_groups); 
+
+        // select the page to redirect as study group index
+        $page_to_redirect = null;
+        $page_to_redirect = view('study_group.index', compact('rooms' , 'buildings' , 'study_groups' ));
+        
+        return $page_to_redirect;
+    }
+
+    /*
+    *   Insert location id and romms of a locations on an array
+    *   @param void
+    *   @return Array $locations_id_and_rooms
+    */
+    private function get_idLocation_room(){
+        Log::info("On get get_idLocation_room");
+        $locations = Location::orderBy('id', 'asc')->get();
+        
+
+        $locations_id_and_rooms  = [];
+        foreach ($locations as $location) {
+            $locations_id_and_rooms[$location->id] = $location->room;
+        }
+        Log::info($locations_id_and_rooms);
+
+        return $locations_id_and_rooms;
+    }
+
+
+    /*
+    *   Insert location id and building of a location on an array
+    *   @param void
+    *   @return Array $locations_id_and_buildings
+    */
+    private function get_idLocation_building(){
+        Log::info("On get get_idLocation_building");
+        $locations = Location::orderBy('id' , 'asc')->get();
+
+        $locations_id_and_buildings  = [];
+        foreach ($locations as $location) {
+            $locations_id_and_buildings[$location->id] = $location->building;
+        }
+        Log::info($locations_id_and_buildings);
+
+        return $locations_id_and_buildings;
+    }
+
+    /*
+    * Correct the format time to brazilian ex: dd/mm/aaaa-hh/mm
+    *   @param datetime $start_time
+    *   @return void
+    */
+    private function correct_time_format(& $study_groups){
+        Log::info('entrou no formatador');
+
+        $number_of_study_groups = count($study_groups);
+        
+        $collection_of_start_time = null;
+        if($number_of_study_groups != 0){
+            foreach ($study_groups as $study_group ) {
+                try {
+                    $date = null;
+                    $date = new DateTime($study_group->start_time);
+                    Log::info($date->format('d-m-Y H:i'));
+                    $study_group->startTime = $date->format('d-m-Y H:i');
+                }catch (Exception $e) {
+                    echo $e->getMessage();
+                    exit(1);
+                }
+            }
+        }else{
+            // nothing to do
+        }
     }
 
     /**
