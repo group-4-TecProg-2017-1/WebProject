@@ -42,7 +42,7 @@
                             <tr>
                             @if ($user == "admin")
                                 <td width="10%" >
-                                    <a href="{{URL::to('/course/'.$course->id) }}" class="btn btn-danger">
+                                    <a href="{{URL::to('/course/'.$course->id) }}" onclick="return confirm('Are you sure you want to delete the course?')" class="btn btn-danger">
                                         Delete
                                     </a>
                                 </td width="10%" >
