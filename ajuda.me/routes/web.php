@@ -125,3 +125,5 @@ Route::get('/study_group' , 'StudyGroupController@index');
 Route::get('/study_group/create' , 'StudyGroupController@create_study_group_page')->middleware('auth');
 
 Route::post('/study_group/store' , 'StudyGroupController@validatesStudyGroupData')->middleware('auth');
+Route::get('/study_group/{study_group_id}/delete' , 'StudyGroupController@deleteStudyGroup')
+->middleware('auth');

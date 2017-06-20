@@ -232,10 +232,10 @@ class StudyGroupController extends Controller
         $valid_duration = self::validate_duration($duration);
 
         $startTime = request('fieldOfStartTime');
-        $startTime = self::validate_start_time($startTime);
-        Log::info ($startTime);
+        $valid_start_time = self::validate_start_time($startTime);
+
         $check_validation = false;
-        if($valid_content_aproached && $valid_duration){
+        if($valid_content_aproached && $valid_duration && $valid_start_time){
             Log::info("all requested data are valid");
             $check_validation = true;
         }else{
@@ -257,13 +257,12 @@ class StudyGroupController extends Controller
         if($start_time != null){
             $formated_start_time = self::format_date_time_to_brazilian($start_time);
             Log::info($formated_start_time);
+            $valid_start_time = true;
         }else{
             Log::info('start time inputed is null');
             # nothing to do in here
         }
 
-
-        
         return  $valid_start_time;
 
     }
@@ -453,6 +452,27 @@ class StudyGroupController extends Controller
         return $study_group;
     }
 
+    /**
+    * delete study group selected by id
+    * @param int $id
+    * @return \Illuminate\Http\Response
+    */
+    public function deleteStudyGroup($id){
+        assert($id != null , 'id não pode ser nulo');
 
+        Log::info("here inside the delete study_group function");
+        $page_to_redirect = null;
+        
+        $study_group = null;
+        $study_group = StudyGroup::find($id);
+
+        if($study_group != null){
+            $study_group->delete();
+        }else{
+            Log::info("could not delete study group because this id does not exist on database");
+        }
+        $page_to_redirect = self::index();
+        return $page_to_redirect;
+    }
 
 }

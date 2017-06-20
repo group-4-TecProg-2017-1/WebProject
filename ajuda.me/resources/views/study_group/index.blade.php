@@ -34,7 +34,7 @@
 							<tr>
                                 <td>
                                     @if ($study_group->email_user_creator == $user_email)   
-                                        <a href="/study_group/delete" onclick="return confirm('Are you sure you want to delete study group?')" class="btn btn-danger">
+                                        <a href="/study_group/{{$study_group->id}}/delete" onclick="return confirm('Are you sure you want to delete study group?')" class="btn btn-danger">
                                             Delete
                                         </a>
                         
