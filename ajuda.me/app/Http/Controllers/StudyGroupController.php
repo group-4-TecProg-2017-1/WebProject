@@ -22,6 +22,7 @@ class StudyGroupController extends Controller
     CONST START_TIME_DATABASE_ATRIBUTE = 'startTime';
     CONST DURATION_DATABASE_ATRIBUTE = 'duration';
     CONST ID_LOCATION_DATABASE_ATRIBUTE = 'id_location';
+    CONST SIZE_OF_CORRECT_DATE_TIME = 16;
 
 
 
@@ -252,11 +253,15 @@ class StudyGroupController extends Controller
     private function validate_start_time($start_time){
 
         Log::info("inside the validate start time method");
-        $valid_start_time = false;
+       
+        # check if start time has the correct valid lenght expected
+        $valid_length = self::correct_length_start_time($start_time);
 
-        if($start_time != null){
+        $valid_start_time = false;
+        if ($start_time != null && $valid_length){
+
+            # format start time to brazilian to show on screen to user
             $formated_start_time = self::format_date_time_to_brazilian($start_time);
-            Log::info($formated_start_time);
             $valid_start_time = true;
         }else{
             Log::info('start time inputed is null');
@@ -267,6 +272,24 @@ class StudyGroupController extends Controller
 
     }
 
+    /*
+    * Validates if the lenght of start time is correct
+    * @param DateTime $formated_start_time
+    * @return boolean $valid_lenght , return true if lenght if equals to 16, (dd-mm-aaaa hh:mm)
+    *                                 return false if is different to 16
+    */
+    private function correct_length_start_time($formated_start_time){
+        assert($formated_start_time != null);
+
+        $valid_length = false;
+        $size_of_date_time = strlen($formated_start_time);
+        if ($size_of_date_time == self::SIZE_OF_CORRECT_DATE_TIME){
+            $valid_length = true;
+        }else{
+            # nothing to do
+        }
+        return $valid_length;
+    }
 
     /*
     *   format DateTime to brazilian format (d-m-Y H:i) d=dia m=mes Y=ano H=hora i=minuto
