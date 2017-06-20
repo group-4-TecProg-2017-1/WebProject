@@ -47,9 +47,13 @@ class StudyGroupController extends Controller
         $study_groups = StudyGroup::orderBy('id' , 'asc')->get();
         self::correct_time_format($study_groups); 
 
+        // get the email of the current user to see what study groups this user can edit
+        $user_email = Auth::user()->email;
+
         // select the page to redirect as study group index
         $page_to_redirect = null;
-        $page_to_redirect = view('study_group.index', compact('rooms' , 'buildings' , 'study_groups' ));
+        $page_to_redirect = view('study_group.index', compact('rooms' , 'buildings' , 
+                                                              'study_groups',  'user_email' ));
         
         return $page_to_redirect;
     }
@@ -107,7 +111,7 @@ class StudyGroupController extends Controller
             foreach ($study_groups as $study_group ) {
                 try {
                     $date = null;
-                    $date = new DateTime($study_group->start_time);
+                    $date = new DateTime($study_group->startTime);
                     Log::info($date->format('d-m-Y H:i'));
                     $study_group->startTime = $date->format('d-m-Y H:i');
                 }catch (Exception $e) {
@@ -139,6 +143,7 @@ class StudyGroupController extends Controller
             $page_to_redirect = view('study_group.create' , compact('locations' , 'selectedLocation'  
                                   , 'monitors' , 'selectedMonitors'));
         }else{
+
             Log::info(self::LOG_ELSE_CREATE_STUDY_GROUP_PAGE);
             $page_to_redirect = view('study_group.index' , compact('study_groups'));
             
@@ -175,15 +180,22 @@ class StudyGroupController extends Controller
         $study_group = null;
         $study_group = self::createStudyGroup();
         $page_to_redirect = null;
-
         if($study_group != null){ 
 
-            #$check_validation = self::validatesRequestedData($request);
+            $check_validation = self::validatesRequestedData($request);
             
-            $study_group = self::completeAtributesOfStudyGroup($study_group , $request);
-            self::store_study_group($study_group);
+            if($check_validation == true){
+                Log::info('all data were inserted correctlly');
+                $study_group = self::completeAtributesOfStudyGroup($study_group , $request);
+                Log::info("aqui vai de novo novamente");
+        Log::info($study_group->startTime);
+                self::store_study_group($study_group);
 
-            $page_to_redirect = redirect('/study_group');
+                $page_to_redirect = redirect('/study_group');
+            }else{
+                Log::info('you have inserted incorrect data');
+                $page_to_redirect = self::create_study_group_page();
+            }
         }else{
            # study group is null and cannot store on database
         }
@@ -209,7 +221,7 @@ class StudyGroupController extends Controller
     /*
     * validates request data to fill in study group object 
     *   @param \Illuminate\Http\Request  $request
-    *   @return boolean check_validation  return true if all data are validated, else return false
+    *   @return boolean $check_validation  return true if all data are validated, else return false
     */
     private function validatesRequestedData(Request $request){
 
@@ -219,13 +231,64 @@ class StudyGroupController extends Controller
         $duration = request('fieldOfDuration');
         $valid_duration = self::validate_duration($duration);
 
+        $startTime = request('fieldOfStartTime');
+        $startTime = self::validate_start_time($startTime);
+        Log::info ($startTime);
+        $check_validation = false;
         if($valid_content_aproached && $valid_duration){
-            Log::info("duration is valid");
+            Log::info("all requested data are valid");
+            $check_validation = true;
         }else{
-             Log::info("duration is not valid");
+             Log::info("requested datas ARE INVALID");
+        }
+        return $check_validation;
+    }
+
+    /*
+    * validates the start time inputed.(minimum, maximum limits)
+    *   @param DateTime $start_time
+    *   @return boolean $valid_start_time
+    */
+    private function validate_start_time($start_time){
+
+        Log::info("inside the validate start time method");
+        $valid_start_time = false;
+
+        if($start_time != null){
+            $formated_start_time = self::format_date_time_to_brazilian($start_time);
+            Log::info($formated_start_time);
+        }else{
+            Log::info('start time inputed is null');
+            # nothing to do in here
         }
 
+
+        
+        return  $valid_start_time;
+
     }
+
+
+    /*
+    *   format DateTime to brazilian format (d-m-Y H:i) d=dia m=mes Y=ano H=hora i=minuto
+    *   @param DateTime #startTime
+    *   @return DateTime $formated_date_time
+    */
+    private function format_date_time_to_brazilian($start_time){
+        $formated_start_time  = null;
+
+        try {
+            $unformated_start_time = null;
+            $unformated_start_time = new DateTime($start_time);
+            $formated_start_time = $unformated_start_time->format('d-m-Y H:i');
+        }catch (Exception $e) {
+            echo $e->getMessage();
+            exit(1);
+        }
+
+        return $formated_start_time;
+    }
+
 
     /*
     * check if duration is validated with all required conditions
@@ -238,11 +301,15 @@ class StudyGroupController extends Controller
 
         $limit_hours_validated = self::validate_limit_of_hours($duration);
 
-        if($duration != null && $lenght_validated){
+        $valid_duration = false;
+        if($duration != null && $lenght_validated ){
+            $valid_duration = true;
             Log::info("duration is all validated");
         }else{
             Log::info("duration has not been validated");
         }
+
+        return $valid_duration;
 
 
     }
@@ -261,8 +328,6 @@ class StudyGroupController extends Controller
         }catch(CastException $ex){
             ex.getTraceAsString();
         }
-
-        Log::info($hour_int);
 
         $valid_limits_hour = false;
         if($hour_int >= self::LOWER_ACEPTED_HOUR && $hour_int <= self::HIGHER_ACEPTED_HOUR){
@@ -384,7 +449,7 @@ class StudyGroupController extends Controller
         $study_group->startTime = $start_time_inputed;
         $study_group->duration = $duration_inputed;
         $study_group->id_location = $id_location_inputed;
-
+        
         return $study_group;
     }
 
