@@ -127,3 +127,5 @@ Route::get('/study_group/create' , 'StudyGroupController@create_study_group_page
 Route::post('/study_group/store' , 'StudyGroupController@validatesStudyGroupData')->middleware('auth');
 Route::get('/study_group/{study_group_id}/delete' , 'StudyGroupController@deleteStudyGroup')
 ->middleware('auth');
+Route::get('/study_group/{study_group_id}/edit' , 'StudyGroupController@edit_study_group')
+->middleware('auth');
