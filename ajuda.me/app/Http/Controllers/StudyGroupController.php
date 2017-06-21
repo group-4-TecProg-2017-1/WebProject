@@ -23,9 +23,13 @@ class StudyGroupController extends Controller
     CONST DURATION_DATABASE_ATRIBUTE = 'duration';
     CONST ID_LOCATION_DATABASE_ATRIBUTE = 'id_location';
     CONST SIZE_OF_CORRECT_DATE_TIME = 16;
+    CONST INITIAL_INDEX = 0;
+    CONST END_OF_DAY_INDEX = 10;
+    CONST TIME_SYMBOL = 'T';
+    CONST INITIAL_TIME_INDEX = 11;
+    CONST END_OF_TIME_INDEX = 5;
 
-
-
+    
     CONST LOG_MESSAGE = 'Study group view reached (index).';
     CONST LOG_FUNCTION_CREATE_PAGE = 'Function to redirect to study group create page has been reached';
     CONST LOG_ELSE_CREATE_STUDY_GROUP_PAGE = 'Else condition of create study group page.';
@@ -477,17 +481,17 @@ class StudyGroupController extends Controller
 
     /**
     * delete study group selected by id
-    * @param int $id
+    * @param int $id_study_group
     * @return \Illuminate\Http\Response
     */
-    public function deleteStudyGroup($id){
+    public function deleteStudyGroup($id_study_group){
         assert($id != null , 'id não pode ser nulo');
 
         Log::info("here inside the delete study_group function");
         $page_to_redirect = null;
         
         $study_group = null;
-        $study_group = StudyGroup::find($id);
+        $study_group = StudyGroup::find($id_study_group);
 
         if($study_group != null){
             $study_group->delete();
@@ -495,6 +499,29 @@ class StudyGroupController extends Controller
             Log::info("could not delete study group because this id does not exist on database");
         }
         $page_to_redirect = self::index();
+        return $page_to_redirect;
+    }
+
+    /**
+    * redirects to edit page of study group
+    * @param int $id_study_group
+    * @return \Illuminate\Http\Response
+    */
+    public function edit_study_group($id_study_group){
+        Log::info("inside the function that redirects to edit study_group page");
+
+        $page_to_redirect = null;
+
+        $study_group = StudyGroup::find($id_study_group);
+        $selected_location = Location::find($study_group->id_location);
+        $locations = Location::orderBy('id', 'asc')->get();
+
+        $start_time = substr($study_group->startTime, self::INITIAL_INDEX, self::END_OF_DAY_INDEX) . self::TIME_SYMBOL . substr($study_group->startTime, self::INITIAL_TIME_INDEX, self::END_OF_TIME_INDEX) ;
+        
+    
+        $page_to_redirect = view('study_group.edit', compact( 'study_group' , 'locations' , 
+                                                                'selected_location' , 'start_time'));
+        Log::info("redirecting to edit study group page");
         return $page_to_redirect;
     }
 
