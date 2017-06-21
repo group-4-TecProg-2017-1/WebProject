@@ -42,7 +42,7 @@
                                 </td>
                                 <td>
                                     @if ($study_group->email_user_creator == $user_email)   
-                                        <a href="/study_group/edit" class="btn btn-info">
+                                        <a href="/study_group/{{$study_group->id}}/edit" class="btn btn-info">
                                             Edit
                                         </a>
                                     @endif
