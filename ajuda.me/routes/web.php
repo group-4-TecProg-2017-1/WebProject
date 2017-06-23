@@ -114,8 +114,12 @@ Route::put('/users/{id}', 'UsersController@update')
 Route::get('/users/{id}/delete', 'UsersController@destroy')
     ->middleware('auth');
 
+
 Route::get('/monitorings', 'MonitoringsController@index')
     ->middleware('auth'); 
+
+Route::get('/calendar', 'CalendarController@index')
+    ->middleware('auth');
 
 Auth::routes();
 

@@ -72,8 +72,10 @@
                             <label for="inputDuration">Courses</label>
                                 @if ($courses->count())
                                     @foreach ($courses as $course)
+                                    @if ($course->id == $monitoring->id_courses)
                                         <p><strong>ID:</strong>  {{ $course->id }}</p>
                                         <p><strong>Course:</strong>  {{ $course->name }}</p>
+                                    @endif
                                     @endforeach
                                 @else
                                   <!-- Nothing to show -->

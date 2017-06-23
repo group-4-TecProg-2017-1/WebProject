@@ -19,14 +19,14 @@
         <div class="collapse navbar-collapse" id="app-navbar-collapse">
             <!-- Left Side Of Navbar -->
             <ul class="nav navbar-nav">
-                @if ($user = Auth::user())
-                    
-                    <li><a href="/users/$user">Users</a></li>
-                    <li><a href="/courses">Courses</a></li>
-                    <li><a href="/locations">Locations</a></li>
-                    <li><a href="/monitorings">Monitoring</a></li>
-                    <li><a href="/study_group">Study Group</a></li>
 
+                @if (Auth::user())
+                <li><a href="/users">Users</a></li>
+                <li><a href="/courses">Courses</a></li>
+                <li><a href="/locations">Locations</a></li>
+                <li><a href="/monitorings">Monitorings</a></li>
+                <li><a href="/calendar">Calendar</a></li>
+                <li><a href="/study_group">Study Group</a></li>
 
                 @else
                     <!-- Nothing to show -->
