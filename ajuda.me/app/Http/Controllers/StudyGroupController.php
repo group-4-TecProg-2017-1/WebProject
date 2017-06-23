@@ -28,6 +28,7 @@ class StudyGroupController extends Controller
     CONST TIME_SYMBOL = 'T';
     CONST INITIAL_TIME_INDEX = 11;
     CONST END_OF_TIME_INDEX = 5;
+    CONST ERROR_VALIDATE_CONTENT_APROACHED = "Content Approached deve ter entre 3 e 255 caracteres";
 
     
     CONST LOG_MESSAGE = 'Study group view reached (index).';
@@ -146,7 +147,7 @@ class StudyGroupController extends Controller
             $monitors = User::where('role', 'monitor')->get();
             $selectedMonitors = User::first()->user_id;
             $page_to_redirect = view('study_group.create' , compact('locations' , 'selectedLocation'  
-                                  , 'monitors' , 'selectedMonitors'));
+                                  , 'monitors' , 'selectedMonitors' ));
         }else{
 
             Log::info(self::LOG_ELSE_CREATE_STUDY_GROUP_PAGE);
@@ -176,33 +177,35 @@ class StudyGroupController extends Controller
 
 
     /**
-    * Validates inputed data of study group to verify if is possible to store on database
+    * store study group on database if all inputed fields are validated
     * @param \Illuminate\Http\Request  $request
-    * @return \Illuminate\Http\Request 
+    * @return \Illuminate\Http\Request $page_to_redirect
     */
-    public function validatesStudyGroupData(Request $request){
+    public function check_validation_to_store_study_group(Request $request){
 
         $study_group = null;
         $study_group = self::createStudyGroup();
         $page_to_redirect = null;
+        $errors_to_store = array();
+
         if($study_group != null){ 
 
-            $check_validation = self::validatesRequestedData($request);
-            
+            $check_validation = self::validatesRequestedData($request , $errors_to_store);
+
             if($check_validation == true){
                 Log::info('all data were inserted correctlly');
                 $study_group = self::completeAtributesOfStudyGroup($study_group , $request);
-                Log::info("aqui vai de novo novamente");
-        Log::info($study_group->startTime);
+        
                 self::store_study_group($study_group);
 
-                $page_to_redirect = redirect('/study_group');
+                $page_to_redirect = redirect('/study_group' );
             }else{
                 Log::info('you have inserted incorrect data');
+
                 $page_to_redirect = self::create_study_group_page();
             }
         }else{
-           # study group is null and cannot store on database
+           # study group is null and could no be stored on database
         }
         return $page_to_redirect;
     }
@@ -228,10 +231,10 @@ class StudyGroupController extends Controller
     *   @param \Illuminate\Http\Request  $request
     *   @return boolean $check_validation  return true if all data are validated, else return false
     */
-    private function validatesRequestedData(Request $request){
+    private function validatesRequestedData(Request $request , & $errors_to_store){
 
         $content_aproached = request('fieldOfContentAproached');
-        $valid_content_aproached = self::validate_content_aproached($content_aproached);
+        $valid_content_aproached = self::validate_content_aproached($content_aproached , $errors_to_store);
 
         $duration = request('fieldOfDuration');
         $valid_duration = self::validate_duration($duration);
@@ -390,7 +393,7 @@ class StudyGroupController extends Controller
     * @param string content_aproached
     * @return boolean $content_aproached_is_validated
     */
-    private function validate_content_aproached($content_aproached){
+    private function validate_content_aproached($content_aproached , & $errors_to_store){
 
         $is_null = true;
         $is_null = self::validate_if_content_aproached_is_null($content_aproached);
@@ -404,6 +407,7 @@ class StudyGroupController extends Controller
             Log::info("content_aproached is valid");
         }else{
             $content_aproached_is_validated = false;
+            array_push($errors_to_store, self::ERROR_VALIDATE_CONTENT_APROACHED);
             Log::info("content_aproached is NOT valid");
         }
 

@@ -6,7 +6,7 @@
 
         <div class="col-md-12 col-md-offset-0" >
             @if(empty($rooms))
-                <div  class="alert alert-danger" role="alert" >
+                <div  class="alert alert-warning" role="alert" >
                     <div class="panel-heading" >
                         <strong>Warning!</strong> <br>Crie uma Location para criar um Study Group.
                     </div>  
@@ -21,9 +21,9 @@
             	<div class="panel-body">
                     <table>
                     	<tr>
+                            <th width="0%"></th>
                             <th width="10%"></th>
-                            <th width="10%"></th>
-	                    	<th width="30%">Creator's email:</th> 
+	                    	<th width="20%">Creator's email:</th> 
 	                        <th width="28%">Content Approached</th> 
 	                        <th width="15%">Start Time</th>
 	                        <th width="17%">Duration</th>
@@ -50,7 +50,7 @@
 								<td>{{$study_group->email_user_creator}}</td>
 								<td>{{$study_group->contentApproached}}</td>
 								<td>{{$study_group->startTime}}</td>
-								<td>{{$study_group->duration}}</td>
+								<td>{{$study_group->duration}} horas</td>
 								<td> 
                                     {{$buildings[$study_group->id_location]}}
                                     {{$rooms[$study_group->id_location]}}

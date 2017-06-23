@@ -3,11 +3,10 @@
 @section('content')
 <div class="container">
     <div class="row">
+
         <div class="col-md-8 col-md-offset-2">
             <div class="panel panel-default">
                 <div class="panel-heading">Create Study Group</div>
-
-
                 <div class="panel-body">
                     <form class="" action="/study_group/store" method="POST">
                         {{ csrf_field() }}
@@ -44,12 +43,7 @@
 
                         <button type="submit" class="btn btn-primary">Create</button>
                     </form>
-                </div>
-
-
-                
-
-               
+                </div>     
             </div>
         </div>
     </div>
