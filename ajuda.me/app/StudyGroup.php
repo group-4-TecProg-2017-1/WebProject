@@ -1,6 +1,9 @@
 <?php
 namespace App;
 
+/**
+* This classes contains all properties of study groups and method to acees thei privates properties
+*/
 class StudyGroup extends Model
 {
     private $study_group_id = null;

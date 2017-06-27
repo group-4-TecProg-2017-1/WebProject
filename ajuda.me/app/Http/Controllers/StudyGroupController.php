@@ -10,6 +10,10 @@ use App\Course;
 use Illuminate\Support\Facades\Auth;
 use \Datetime;
 
+/**
+* Control all the needs about study group, like create, delete, search, show and all
+* methods to validate the informations related
+*/
 class StudyGroupController extends Controller
 {
     CONST MAX_LENGHT_CONTENT_APPROACHED = 255;
