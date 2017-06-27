@@ -28,7 +28,11 @@ class StudyGroupController extends Controller
     CONST TIME_SYMBOL = 'T';
     CONST INITIAL_TIME_INDEX = 11;
     CONST END_OF_TIME_INDEX = 5;
-    CONST ERROR_VALIDATE_CONTENT_APROACHED = "Content Approached deve ter entre 3 e 255 caracteres";
+    CONST NULL_CONTENT_APROACHED = "O conteúdo abordado não pode ser nulo, deve existir alguma informação.";
+    CONST ERROR_LENGTH_CONTENT_APROACHED = "O conteúdo abordado deve estar entre 3 e 255 caracteres.";
+    CONST ERROR_INVALID_LENGTH = "Duração inválida. (HH:MM)";
+    CONST ERROR_START_TIME = "Tempo de início inválido. (DD/MM/AAAA HH:MM)";
+
 
     
     CONST LOG_MESSAGE = 'Study group view reached (index).';
@@ -36,6 +40,9 @@ class StudyGroupController extends Controller
     CONST LOG_ELSE_CREATE_STUDY_GROUP_PAGE = 'Else condition of create study group page.';
     CONST LOG_CREATED_STUDY_GROUP = 'The study group has been created succesfully';
     CONST LOG_USER_NOT_CREATED = 'The study group HAS NOT been created';
+
+    // variable of class to store informations about errors to create study group
+    public $errors = array(); // the errors start empty
    
 	/**
     * Display a listing study groups.
@@ -146,8 +153,11 @@ class StudyGroupController extends Controller
             $selectedLocation = User::first()->location_id;
             $monitors = User::where('role', 'monitor')->get();
             $selectedMonitors = User::first()->user_id;
+            Log::info("imprimindo o array de erros");
+            Log::info($this->errors);
+
             $page_to_redirect = view('study_group.create' , compact('locations' , 'selectedLocation'  
-                                  , 'monitors' , 'selectedMonitors' ));
+                                  , 'monitors' , 'selectedMonitors' ))->with(['errors'=>$this->errors]);
         }else{
 
             Log::info(self::LOG_ELSE_CREATE_STUDY_GROUP_PAGE);
@@ -177,7 +187,7 @@ class StudyGroupController extends Controller
 
 
     /**
-    * store study group on database if all inputed fields are validated
+    * Store study group on database if all inputed fields are validated
     * @param \Illuminate\Http\Request  $request
     * @return \Illuminate\Http\Request $page_to_redirect
     */
@@ -186,11 +196,10 @@ class StudyGroupController extends Controller
         $study_group = null;
         $study_group = self::createStudyGroup();
         $page_to_redirect = null;
-        $errors_to_store = array();
 
         if($study_group != null){ 
 
-            $check_validation = self::validatesRequestedData($request , $errors_to_store);
+            $check_validation = self::validatesRequestedData($request );
 
             if($check_validation == true){
                 Log::info('all data were inserted correctlly');
@@ -231,16 +240,16 @@ class StudyGroupController extends Controller
     *   @param \Illuminate\Http\Request  $request
     *   @return boolean $check_validation  return true if all data are validated, else return false
     */
-    private function validatesRequestedData(Request $request , & $errors_to_store){
+    private function validatesRequestedData(Request $request ){
 
         $content_aproached = request('fieldOfContentAproached');
-        $valid_content_aproached = self::validate_content_aproached($content_aproached , $errors_to_store);
-
-        $duration = request('fieldOfDuration');
-        $valid_duration = self::validate_duration($duration);
+        $valid_content_aproached = self::validate_content_aproached($content_aproached);
 
         $startTime = request('fieldOfStartTime');
         $valid_start_time = self::validate_start_time($startTime);
+
+        $duration = request('fieldOfDuration');
+        $valid_duration = self::validate_duration($duration);
 
         $check_validation = false;
         if($valid_content_aproached && $valid_duration && $valid_start_time){
@@ -271,6 +280,7 @@ class StudyGroupController extends Controller
             $formated_start_time = self::format_date_time_to_brazilian($start_time);
             $valid_start_time = true;
         }else{
+            array_push($this->errors , self::ERROR_START_TIME);
             Log::info('start time inputed is null');
             # nothing to do in here
         }
@@ -328,13 +338,12 @@ class StudyGroupController extends Controller
         $lenght_validated = false;
         $lenght_validated = self::validate_lenght_of_duration($duration);
 
-        $limit_hours_validated = self::validate_limit_of_hours($duration);
-
         $valid_duration = false;
         if($duration != null && $lenght_validated ){
             $valid_duration = true;
             Log::info("duration is all validated");
         }else{
+            array_push($this->errors , self::ERROR_INVALID_LENGTH);
             Log::info("duration has not been validated");
         }
 
@@ -393,7 +402,7 @@ class StudyGroupController extends Controller
     * @param string content_aproached
     * @return boolean $content_aproached_is_validated
     */
-    private function validate_content_aproached($content_aproached , & $errors_to_store){
+    private function validate_content_aproached($content_aproached){
 
         $is_null = true;
         $is_null = self::validate_if_content_aproached_is_null($content_aproached);
@@ -407,7 +416,6 @@ class StudyGroupController extends Controller
             Log::info("content_aproached is valid");
         }else{
             $content_aproached_is_validated = false;
-            array_push($errors_to_store, self::ERROR_VALIDATE_CONTENT_APROACHED);
             Log::info("content_aproached is NOT valid");
         }
 
@@ -426,7 +434,7 @@ class StudyGroupController extends Controller
         if($content_aproached != null){
             $is_null = false;
         }else{
-            // nothing to do
+            array_push($this->errors , self::NULL_CONTENT_APROACHED);
         }
 
         return $is_null;
@@ -447,7 +455,7 @@ class StudyGroupController extends Controller
             $lenght_of_content_aproached >= self::MIN_LENGHT_CONTENT_APPROACHED ){
             $valid_lenght = true;
         }else{
-            // nothing to do
+            array_push($this->errors , self::ERROR_LENGTH_CONTENT_APROACHED);
         }
 
         return $valid_lenght;

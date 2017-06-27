@@ -3,7 +3,19 @@
 @section('content')
 <div class="container">
     <div class="row">
-
+        @if(count($errors) != 0)
+            <div class="col-md-8 col-md-offset-2"> 
+                <div class="alert alert-danger" role="alert">
+                    @foreach($errors as $error)
+                        {{$error}} <br>
+                    @endforeach
+                </div>
+            </div>
+        @else
+            {{Log::info("caiu no else")}}
+        @endif
+        {{Log::info("Count of errors")}}
+        {{Log::info(count($errors))}}
         <div class="col-md-8 col-md-offset-2">
             <div class="panel panel-default">
                 <div class="panel-heading">Create Study Group</div>
